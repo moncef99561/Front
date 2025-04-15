@@ -1,0 +1,153 @@
+/* Variables CSS pour les couleurs */
+:root {
+    --color-employees-primary: #4F46E5;
+    --color-employees-secondary: #C7D2FE;
+    --color-employees-bg: #4F46E520;
+  
+    --color-departments-primary: #10B981;
+    --color-departments-secondary: #A7F3D0;
+    --color-departments-bg: #10B98120;
+  
+    --color-contracts-primary: #F59E0B;
+    --color-contracts-secondary: #FDE68A;
+    --color-contracts-bg: #F59E0B20;
+  
+    --color-offers-primary: #8B5CF6;
+    --color-offers-secondary: #DDD6FE;
+    --color-offers-bg: #8B5CF620;
+  }
+  
+  .dashboard-container {
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+  }
+  
+  .dashboard-header {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+  }
+  
+  .stat-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+  }
+  
+  .stat-icon-container {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    backdrop-filter: blur(4px);
+  }
+  
+  .stat-title {
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .stat-value {
+    font-size: 2rem;
+    margin-bottom: 0;
+    color: #ffffff;
+  }
+  
+  .chart-wrapper {
+    height: 320px;
+  }
+  
+  .recent-title {
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+  }
+  
+  .recent-activity-item {
+    background-color: #F8FAFC;
+    border: none;
+    padding-left: 0;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .recent-activity-icon {
+    padding: 0.5rem;
+    margin-right: 0.75rem;
+    border-radius: 0.375rem;
+  }
+  
+  .recent-activity-title {
+    color: #1f2937;
+  }
+  
+  .recent-activity-time {
+    font-size: 0.875rem;
+    color: #6c757d;
+  }
+  
+  /* Couleurs par catégorie */
+  .employees-card {
+    background-color: var(--color-employees-primary);
+  }
+  .employees-bg {
+    background-color: var(--color-employees-bg);
+  }
+  .employees-icon {
+    color: var(--color-employees-secondary);
+  }
+  .employees-text {
+    color: var(--color-employees-secondary);
+  }
+  
+  .departments-card {
+    background-color: var(--color-departments-primary);
+  }
+  .departments-bg {
+    background-color: var(--color-departments-bg);
+  }
+  .departments-icon {
+    color: var(--color-departments-secondary);
+  }
+  .departments-text {
+    color: var(--color-departments-secondary);
+  }
+  
+  .contracts-card {
+    background-color: var(--color-contracts-primary);
+  }
+  .contracts-bg {
+    background-color: var(--color-contracts-bg);
+  }
+  .contracts-icon {
+    color: var(--color-contracts-secondary);
+  }
+  .contracts-text {
+    color: var(--color-contracts-secondary);
+  }
+  .contracts-icon-bg {
+    background-color: var(--color-contracts-bg);
+  }
+  .contracts-icon-text {
+    color: var(--color-contracts-primary);
+  }
+  
+  .offers-card {
+    background-color: var(--color-offers-primary);
+  }
+  .offers-bg {
+    background-color: var(--color-offers-bg);
+  }
+  .offers-icon {
+    color: var(--color-offers-secondary);
+  }
+  .offers-text {
+    color: var(--color-offers-secondary);
+  }
+  .offers-icon-bg {
+    background-color: var(--color-offers-bg);
+  }
+  .offers-icon-text {
+    color: var(--color-offers-primary);
+  }
+  
