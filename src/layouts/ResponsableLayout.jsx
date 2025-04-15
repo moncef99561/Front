@@ -7,6 +7,7 @@ import Dashboard from "../features/responsable/components/dashboard/Dashboard";
 import EmployeeList from "../features/responsable/pages/employee/EmployeeList";
 import ServiceList from "../features/responsable/pages/service/ServiceList"
 import Sidebar from "../features/responsable/components/sidebar/Sidebar";
+import PosteList from "../features/responsable/pages/poste/PosteListe";
 // import { GuardedRoute } from "../middleware/Guards";
 
 function ResponsableLayout() {
@@ -21,7 +22,7 @@ function ResponsableLayout() {
           <Route path="/contractTypes" element={<ContractTypeList />} />
           <Route path="/departments" element={<DepartmentList />} />
           <Route path="/services" element={<ServiceList />} />
-          {/* <Route path="/postes" element={<PosteList />} /> */}
+          <Route path="/postes" element={<PosteList />} />
 
           {/* <Route path="/interviews" element={<InterviewList />} /> */}
         </Routes>
