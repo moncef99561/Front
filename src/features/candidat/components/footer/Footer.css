@@ -1,0 +1,35 @@
+.footer {
+    /* background-color: #d5b1e5; */
+    color: rgb(0, 0, 0);
+    padding: 40px 0;
+    margin-bottom: 0;
+  }
+  
+  .footer h6 {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .footer a {
+    color: rgba(0, 0, 0, 0.534);
+    text-decoration: none;
+    font-size: 14px;
+  }
+  
+  .footer a:hover {
+    text-decoration: underline;
+  }
+  
+  .footer .footer-logo {
+    font-size: 18px;
+    font-style: italic;
+  }
+  
+  .footer input {
+    max-width: 70%;
+  }
+  
+  .footer button {
+    white-space: nowrap;
+  }
+  

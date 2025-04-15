@@ -1,0 +1,18 @@
+.cta-section {
+    background-color: #111;
+    color: white;
+    padding: 60px 0;
+  }
+  
+  .cta-section h2 {
+    font-size: 2.5rem;
+  }
+  
+  .cta-section p {
+    font-size: 1.2rem;
+  }
+  
+  .cta-section .btn {
+    font-size: 1rem;
+  }
+  

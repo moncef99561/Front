@@ -1,0 +1,19 @@
+.features-section {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+}
+
+.features-section h2 {
+  font-size: 2.5rem;
+}
+
+.features-section p {
+  font-size: 1.2rem;
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 15px;
+}

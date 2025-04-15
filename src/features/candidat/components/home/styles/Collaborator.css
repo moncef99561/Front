@@ -1,0 +1,16 @@
+.collaborator-section {
+    background: linear-gradient(to bottom, #e8f1ff, #ffffff);
+  }
+  
+  .collaborator-logo {
+    max-height: 60px;
+    object-fit: contain;
+    filter: grayscale(0%);
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+  
+  .collaborator-logo:hover {
+    filter: grayscale(100%);
+    transform: scale(1.05);
+  }
+  
