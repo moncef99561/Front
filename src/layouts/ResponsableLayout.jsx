@@ -1,8 +1,12 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import ContractTypeList from "../features/responsable/pages/contratType/ContractTypeList";
+import DepartmentList from "../features/responsable/pages/departement/DepartmentList";
+import JobOfferList from "../features/responsable/pages/jobOffres/JobOfferList";
 import Dashboard from "../features/responsable/components/dashboard/Dashboard";
-import Sidebar from "../features/responsable/components/sidebar/Sidebar";
 import EmployeeList from "../features/responsable/pages/employee/EmployeeList";
+import ServiceList from "../features/responsable/pages/service/ServiceList"
+import Sidebar from "../features/responsable/components/sidebar/Sidebar";
 // import { GuardedRoute } from "../middleware/Guards";
 
 function ResponsableLayout() {
@@ -13,12 +17,10 @@ function ResponsableLayout() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/employees" element={<EmployeeList />} />
-          {/* <Route path="/joboffers" element={<JobOfferList />} /> */}
-          {/* <Route path="/contracttypes" element={<ContractTypeList />} /> */}
-          {/* <Route path="/" element={<EmployeeList />} /> */}
-
-          {/* <Route path="/departments" element={<DepartmentList />} /> */}
-          {/* <Route path="/services" element={<ServiceList />} /> */}
+          <Route path="/jobOffers" element={<JobOfferList />} />
+          <Route path="/contractTypes" element={<ContractTypeList />} />
+          <Route path="/departments" element={<DepartmentList />} />
+          <Route path="/services" element={<ServiceList />} />
           {/* <Route path="/postes" element={<PosteList />} /> */}
 
           {/* <Route path="/interviews" element={<InterviewList />} /> */}

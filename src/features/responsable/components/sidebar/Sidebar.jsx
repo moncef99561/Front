@@ -10,13 +10,12 @@ const Sidebar = () => {
   const menuItems = [
     { to: '/responsable', icon: <FaHome />, text: 'Tableau de Bord' },
     { to: '/responsable/employees', icon: <FaUsers />, text: 'Employés' },
-    { to: '/joboffers', icon: <FaBriefcase />, text: 'Offres d\'Emploi' },
-    { to: '/contracttypes', icon: <FaFileContract />, text: 'Contrat' },
-    { to: '/departments', icon: <FaBuilding />, text: 'Départements' },
-    { to: '/services', icon: <FaCogs />, text: 'Services' },
-    { to: '/postes', icon: <FaUserTie />, text: 'Postes' },
-    { to: '/interviews', icon: <FaCalendarAlt />, text: 'Entretiens' },
-    { to: '/projet', icon: <FaCalendarAlt />, text: 'Projets' }
+    { to: '/responsable/jobOffers', icon: <FaBriefcase />, text: 'Offres d\'Emploi' },
+    { to: '/responsable/contractTypes', icon: <FaFileContract />, text: 'Types Contrat' },
+    { to: '/responsable/departments', icon: <FaBuilding />, text: 'Départements' },
+    { to: '/responsable/services', icon: <FaCogs />, text: 'Services' },
+    { to: '/responsable/postes', icon: <FaUserTie />, text: 'Postes' },
+    { to: '/responsable/interviews', icon: <FaCalendarAlt />, text: 'Entretiens' },
   ];
 
   return (
