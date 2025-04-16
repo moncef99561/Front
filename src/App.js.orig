@@ -20,8 +20,14 @@ function App() {
         <Route path="/register" element={<Register />} />
    
         {/* 🔐 Layouts */}   
+<<<<<<< HEAD
+=======
         <Route path="/*" element={<PublicLayout />} />
+>>>>>>> 19f975427d0b568f8f34cf534b6e63e87753832a
         <Route path="/responsable/*" element={<ResponsableLayout />} />
+        <Route path="/*" element={<PublicLayout />} />
+
+
 
         {/* 🔐 Exemple d'espace privé externe */}
         {/* <Route

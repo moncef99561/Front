@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
-import api from '../services/api';
+import api from '../../services/api';
 
 const EditEmployee = ({ show, handleClose, handleSubmit, formData, handleInputChange, setFormData,}) => {
   const [departments, setDepartments] = useState([]);

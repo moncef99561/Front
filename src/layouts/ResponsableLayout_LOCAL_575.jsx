@@ -9,7 +9,6 @@ import ServiceList from "../features/responsable/pages/service/ServiceList"
 import Sidebar from "../features/responsable/components/sidebar/Sidebar";
 import PosteList from "../features/responsable/pages/poste/PosteListe";
 // import { GuardedRoute } from "../middleware/Guards";
-import EntretienList from "../features/responsable/pages/entretien/EntretienList";
 
 function ResponsableLayout() {
   return (
@@ -24,11 +23,7 @@ function ResponsableLayout() {
           <Route path="/departments" element={<DepartmentList />} />
           <Route path="/services" element={<ServiceList />} />
           <Route path="/postes" element={<PosteList />} />
-<<<<<<< HEAD
           {/* <Route path="/interviews" element={<InterviewList />} /> */}
-=======
-          <Route path="/entretiens" element={<EntretienList />} />
->>>>>>> 19f975427d0b568f8f34cf534b6e63e87753832a
         </Routes>
       </div>
     </div>
