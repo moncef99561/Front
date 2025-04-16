@@ -15,7 +15,7 @@ const Sidebar = () => {
     { to: '/responsable/departments', icon: <FaBuilding />, text: 'Départements' },
     { to: '/responsable/services', icon: <FaCogs />, text: 'Services' },
     { to: '/responsable/postes', icon: <FaUserTie />, text: 'Postes' },
-    { to: '/responsable/interviews', icon: <FaCalendarAlt />, text: 'Entretiens' },
+    { to: '/responsable/entretiens', icon: <FaCalendarAlt />, text: 'Entretiens' },
   ];
 
   return (

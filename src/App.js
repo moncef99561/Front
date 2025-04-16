@@ -17,7 +17,7 @@ function App() {
         <Route path="/register" element={<Register />} />
    
         {/* 🔐 Layouts */}   
-        <Route path="/public/*" element={<PublicLayout />} />
+        <Route path="/*" element={<PublicLayout />} />
         <Route path="/responsable/*" element={<ResponsableLayout />} />
 
 
