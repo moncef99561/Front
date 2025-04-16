@@ -1,8 +1,11 @@
-import api from '../../services/api';
 import React, { useState, useEffect, useCallback } from 'react';
-import { FaEdit, FaTrash, FaUser, FaFileContract, FaInfoCircle } from 'react-icons/fa';
 import { Button, Alert, Container, Table } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { FaEdit, FaTrash, FaUser, FaFileContract, FaInfoCircle } from 'react-icons/fa';
+import api from '../../services/api';
 import AddEmployee from './AddEmployee';
+import AccountModal from '../compte/AccountModal';
+import ContractModal from '../contract/ContractModal';
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
@@ -11,6 +14,9 @@ const EmployeeList = () => {
   const [postes, setPostes] = useState([]);
   const [currentEmployee, setCurrentEmployee] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showAccountModal, setShowAccountModal] = useState(false);
+  const [showContractModal, setShowContractModal] = useState(false);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
   const [formData, setFormData] = useState({
     cin: '', nom: '', prenom: '', dateNaissance: '', email: '', telephone: '', adresse: '',
     dateEmbauche: '', rib: '', banque: '', cnss: '', departmentId: '', serviceId: '', posteId: ''
@@ -70,35 +76,53 @@ const EmployeeList = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Conversion des dates au format ISO
     const payload = {
-      CIN: formData.cin,
-      Nom: formData.nom,
-      Prenom: formData.prenom,
-      DateNaissance: new Date(formData.dateNaissance).toISOString(),
-      DateEmbauche: new Date(formData.dateEmbauche).toISOString(),
-      Email: formData.email,
-      Telephone: formData.telephone,
-      Adresse: formData.adresse,
-      Rib: formData.rib,
-      Banque: formData.banque,
-      CNSS: formData.cnss,
-      PosteId: Number(formData.posteId)
+      employeeId: currentEmployee?.employeeId, // Obligatoire pour PUT
+      cin: formData.cin,
+      nom: formData.nom,
+      prenom: formData.prenom,
+      dateNaissance: new Date(formData.dateNaissance).toISOString(),
+      dateEmbauche: new Date(formData.dateEmbauche).toISOString(),
+      email: formData.email,
+      telephone: formData.telephone || null, // Permet les valeurs null
+      adresse: formData.adresse || null,
+      rib: formData.rib || null,
+      banque: formData.banque || null,
+      cnss: formData.cnss || null,
+      posteId: Number(formData.posteId)
     };
+  
     try {
-      const response = await api.post('/employees', payload);
-      if (response.status === 201) {
-        setShowModal(false);
-        fetchEmployees();
+      let response;
+      if (currentEmployee) {
+        // Mise à jour
+        response = await api.put(`/employees/${currentEmployee.employeeId}`, payload);
+      } else {
+        // Création
+        response = await api.post('/employees', payload);
       }
+  
+      console.log("Succès :", response.data);
+      await fetchEmployees();
+      setShowModal(false);
+      setFormData({ // Réinitialiser le formulaire
+        cin: '', nom: '', prenom: '', dateNaissance: '', email: '',
+        telephone: '', adresse: '', dateEmbauche: '', rib: '',
+        banque: '', cnss: '', departmentId: '', serviceId: '', posteId: ''
+      });
     } catch (err) {
-      const errorData = err.response?.data;
-      if (errorData?.errors) {
-        const errorMessages = Object.entries(errorData.errors)
+      console.error("Erreur complète :", {
+        status: err.response?.status,
+        data: err.response?.data,
+        config: err.config
+      });
+      if (err.response?.data?.errors) {
+        const errorMessages = Object.entries(err.response.data.errors)
           .map(([field, errors]) => `${field}: ${errors.join(", ")}`)
           .join("\n");
-        showError(errorMessages);
-      } else {
-        showError(errorData?.title || "Erreur lors de la création");
+        alert(`Erreurs de validation :\n${errorMessages}`);
       }
     }
   };
@@ -137,11 +161,23 @@ const EmployeeList = () => {
     setShowModal(true);
   };
 
+  const handleShowAccountModal = (employee) => {
+    setSelectedEmployeeId(employee.employeeId);
+    setShowAccountModal(true);
+  };
+
+  const handleShowContractModal = (employee) => {
+    setSelectedEmployeeId(employee.employeeId);
+    setShowContractModal(true);
+  };
+
   return (
     <Container className="mt-5">
       <h1 className="text-center mb-4">Gestion des Employés</h1>
       {error && <Alert variant="danger">{error}</Alert>}
-      <Button variant="primary" className="mb-3" onClick={() => handleShowModal()}>Ajouter Employé</Button>
+      <Button variant="primary" className="mb-3" onClick={() => handleShowModal()}>
+        Ajouter Employé
+      </Button>
 
       <Table striped bordered hover>
         <thead>
@@ -161,16 +197,61 @@ const EmployeeList = () => {
               <td>{employee.prenom}</td>
               <td>{employee.email}</td>
               <td>
-                <Button variant="info" className="me-2"><FaUser /></Button>
-                <Button variant="secondary" className="me-2"><FaFileContract /></Button>
-                <Button variant="warning" className="me-2" onClick={() => handleShowModal(employee)}><FaEdit /></Button>
-                <Button variant="danger" className="me-2" onClick={() => handleDelete(employee.employeeId)}><FaTrash /></Button>
-                <Button variant="success"><FaInfoCircle /></Button>
+                <Button 
+                  variant="info" 
+                  className="me-2"
+                  onClick={() => handleShowAccountModal(employee)}
+                >
+                  <FaUser />
+                </Button>
+                <Button 
+                  variant="secondary" 
+                  className="me-2"
+                  onClick={() => handleShowContractModal(employee)}
+                >
+                  <FaFileContract />
+                </Button>
+                <Button 
+                  variant="warning" 
+                  className="me-2" 
+                  onClick={() => handleShowModal(employee)}
+                >
+                  <FaEdit />
+                </Button>
+                <Button 
+                  variant="danger" 
+                  className="me-2" 
+                  onClick={() => handleDelete(employee.employeeId)}
+                >
+                  <FaTrash />
+                </Button>
+                <Button 
+  variant="success" 
+  as={Link} 
+  to={`/detail/${employee.employeeId}`}
+>
+  <FaInfoCircle />
+</Button>
+                {/* <Button variant="success">
+                  <FaInfoCircle />
+                </Button> */}
               </td>
             </tr>
           ))}
         </tbody>
       </Table>
+
+      <AccountModal
+        employeeId={selectedEmployeeId}
+        show={showAccountModal}
+        handleClose={() => setShowAccountModal(false)}
+      />
+
+      <ContractModal
+        employeeId={selectedEmployeeId}
+        show={showContractModal}
+        handleClose={() => setShowContractModal(false)}
+      />
 
       <AddEmployee
         show={showModal}
