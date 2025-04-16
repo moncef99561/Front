@@ -26,7 +26,7 @@ function ResponsableLayout() {
           <Route path="/services" element={<ServiceList />} />
           <Route path="/postes" element={<PosteList />} />
           <Route path="/entretiens" element={<EntretienList />} />
-          <Route path="/employees/:employeeId" element={<DetailEmployee />} />
+          <Route path="/detail/:employeeId" element={<DetailEmployee />} />
         </Routes>
       </div>
     </div>

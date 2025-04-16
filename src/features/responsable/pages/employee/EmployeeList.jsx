@@ -1,9 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button, Alert, Container, Table } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { FaEdit, FaTrash, FaUser, FaFileContract, FaInfoCircle } from 'react-icons/fa';
+import { 
+  Button, 
+  Alert, 
+  Container, 
+  Table 
+} from 'react-bootstrap';
+import { 
+  FaEdit, 
+  FaTrash, 
+  FaUser, 
+  FaFileContract, 
+  FaInfoCircle 
+} from 'react-icons/fa';
 import api from '../../services/api';
 import AddEmployee from './AddEmployee';
+import DetailEmployee from './DetailEmployee';
 import AccountModal from '../compte/AccountModal';
 import ContractModal from '../contract/ContractModal';
 
@@ -16,7 +27,9 @@ const EmployeeList = () => {
   const [showModal, setShowModal] = useState(false);
   const [showAccountModal, setShowAccountModal] = useState(false);
   const [showContractModal, setShowContractModal] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
+  const [selectedEmployeeInfo, setSelectedEmployeeInfo] = useState(null);
   const [formData, setFormData] = useState({
     cin: '', nom: '', prenom: '', dateNaissance: '', email: '', telephone: '', adresse: '',
     dateEmbauche: '', rib: '', banque: '', cnss: '', departmentId: '', serviceId: '', posteId: ''
@@ -77,16 +90,15 @@ const EmployeeList = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Conversion des dates au format ISO
     const payload = {
-      employeeId: currentEmployee?.employeeId, // Obligatoire pour PUT
+      employeeId: currentEmployee?.employeeId,
       cin: formData.cin,
       nom: formData.nom,
       prenom: formData.prenom,
       dateNaissance: new Date(formData.dateNaissance).toISOString(),
       dateEmbauche: new Date(formData.dateEmbauche).toISOString(),
       email: formData.email,
-      telephone: formData.telephone || null, // Permet les valeurs null
+      telephone: formData.telephone || null,
       adresse: formData.adresse || null,
       rib: formData.rib || null,
       banque: formData.banque || null,
@@ -95,29 +107,20 @@ const EmployeeList = () => {
     };
   
     try {
-      let response;
       if (currentEmployee) {
-        // Mise à jour
-        response = await api.put(`/employees/${currentEmployee.employeeId}`, payload);
+        await api.put(`/employees/${currentEmployee.employeeId}`, payload);
       } else {
-        // Création
-        response = await api.post('/employees', payload);
+        await api.post('/employees', payload);
       }
-  
-      console.log("Succès :", response.data);
+      
       await fetchEmployees();
       setShowModal(false);
-      setFormData({ // Réinitialiser le formulaire
+      setFormData({
         cin: '', nom: '', prenom: '', dateNaissance: '', email: '',
         telephone: '', adresse: '', dateEmbauche: '', rib: '',
         banque: '', cnss: '', departmentId: '', serviceId: '', posteId: ''
       });
     } catch (err) {
-      console.error("Erreur complète :", {
-        status: err.response?.status,
-        data: err.response?.data,
-        config: err.config
-      });
       if (err.response?.data?.errors) {
         const errorMessages = Object.entries(err.response.data.errors)
           .map(([field, errors]) => `${field}: ${errors.join(", ")}`)
@@ -169,6 +172,11 @@ const EmployeeList = () => {
   const handleShowContractModal = (employee) => {
     setSelectedEmployeeId(employee.employeeId);
     setShowContractModal(true);
+  };
+
+  const handleShowInfoModal = (employee) => {
+    setSelectedEmployeeInfo(employee);
+    setShowInfoModal(true);
   };
 
   return (
@@ -226,15 +234,11 @@ const EmployeeList = () => {
                   <FaTrash />
                 </Button>
                 <Button 
-  variant="success" 
-  as={Link} 
-  to={`/detail/${employee.employeeId}`}
->
-  <FaInfoCircle />
-</Button>
-                {/* <Button variant="success">
+                  variant="success" 
+                  onClick={() => handleShowInfoModal(employee)}
+                >
                   <FaInfoCircle />
-                </Button> */}
+                </Button>
               </td>
             </tr>
           ))}
@@ -251,6 +255,12 @@ const EmployeeList = () => {
         employeeId={selectedEmployeeId}
         show={showContractModal}
         handleClose={() => setShowContractModal(false)}
+      />
+
+      <DetailEmployee 
+        show={showInfoModal}
+        onHide={() => setShowInfoModal(false)}
+        employee={selectedEmployeeInfo}
       />
 
       <AddEmployee

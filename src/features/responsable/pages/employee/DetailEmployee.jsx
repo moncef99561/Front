@@ -1,164 +1,142 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { 
-  Container,
-  Card,
+  Modal, 
+  Badge, 
+  Row, 
+  Col, 
   ListGroup,
-  ListGroupItem,
-  Badge,
-  Spinner,
-  Alert,
-  Button
+  Button 
 } from 'react-bootstrap';
-import { Link, useParams } from 'react-router-dom';
-import { FaArrowLeft, FaUser, FaBuilding, FaBriefcase, FaInfoCircle } from 'react-icons/fa';
-import api from '../../services/api';
 
-const DetailEmployee = () => {
-  const { employeeId } = useParams();
-  const [employee, setEmployee] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    const fetchEmployee = async () => {
-      try {
-        const response = await api.get(`/employees/${employeeId}/details`);
-        setEmployee(response.data);
-      } catch (err) {
-        setError('Erreur de chargement des détails de l\'employé');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEmployee();
-  }, [employeeId]);
-
-  if (loading) {
-    return (
-      <Container className="text-center mt-5">
-        <Spinner animation="border" variant="primary" />
-        <p className="mt-2">Chargement des détails...</p>
-      </Container>
-    );
-  }
-
-  if (error) {
-    return (
-      <Container className="mt-4">
-        <Alert variant="danger">
-          {error}
-        </Alert>
-      </Container>
-    );
-  }
-
-  if (!employee) {
-    return (
-      <Container className="mt-4">
-        <Alert variant="warning">
-          Employé introuvable
-        </Alert>
-      </Container>
-    );
-  }
+const DetailEmployee = ({ show, onHide, employee }) => {
+  if (!employee) return null;
 
   return (
-    <Container className="mt-4">
-      <Button 
-        as={Link} 
-        to="/employees" 
-        variant="outline-primary" 
-        className="mb-4"
-      >
-        <FaArrowLeft className="me-2" />
-        Retour à la liste
-      </Button>
-
-      <Card>
-        <Card.Header className="bg-primary text-white">
-          <h3 className="mb-0">
-            <FaUser className="me-2" />
-            {employee.prenom} {employee.nom}
-          </h3>
-        </Card.Header>
-
-        <Card.Body>
-          <div className="row">
-            <div className="col-md-6">
-              <Card className="mb-4">
-                <Card.Header>
-                  <FaInfoCircle className="me-2" />
-                  Informations Personnelles
-                </Card.Header>
-                <ListGroup variant="flush">
-                  <ListGroupItem>
-                    <strong>CIN:</strong> {employee.cin}
-                  </ListGroupItem>
-                  <ListGroupItem>
-                    <strong>Date de Naissance:</strong>{" "}
+    <Modal show={show} onHide={onHide} size="lg">
+      <Modal.Header closeButton>
+        <Modal.Title>Détails de l'Employé</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className="row">
+          <div className="col-md-6">
+            <ListGroup>
+              <ListGroup.Item>
+                <Row>
+                  <Col md={4} className="fw-bold">CIN:</Col>
+                  <Col md={8}>{employee.cin}</Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col md={4} className="fw-bold">Nom:</Col>
+                  <Col md={8}>{employee.nom}</Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col md={4} className="fw-bold">Prénom:</Col>
+                  <Col md={8}>{employee.prenom}</Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col md={4} className="fw-bold">Date Naissance:</Col>
+                  <Col md={8}>
                     {new Date(employee.dateNaissance).toLocaleDateString()}
-                  </ListGroupItem>
-                  <ListGroupItem>
-                    <strong>Email:</strong> {employee.email}
-                  </ListGroupItem>
-                  <ListGroupItem>
-                    <strong>Téléphone:</strong> {employee.telephone || '-'}
-                  </ListGroupItem>
-                </ListGroup>
-              </Card>
-            </div>
-
-            <div className="col-md-6">
-              <Card className="mb-4">
-                <Card.Header>
-                  <FaBriefcase className="me-2" />
-                  Informations Professionnelles
-                </Card.Header>
-                <ListGroup variant="flush">
-                  <ListGroupItem>
-                    <strong>Date d'Embauche:</strong>{" "}
-                    {new Date(employee.dateEmbauche).toLocaleDateString()}
-                  </ListGroupItem>
-                  <ListGroupItem>
-                    <strong>RIB:</strong> {employee.rib || '-'}
-                  </ListGroupItem>
-                  <ListGroupItem>
-                    <strong>Banque:</strong> {employee.banque || '-'}
-                  </ListGroupItem>
-                  <ListGroupItem>
-                    <strong>CNSS:</strong> {employee.cnss || '-'}
-                  </ListGroupItem>
-                </ListGroup>
-              </Card>
-
-              {employee.poste && (
-                <Card>
-                  <Card.Header>
-                    <FaBuilding className="me-2" />
-                    Affectation
-                  </Card.Header>
-                  <ListGroup variant="flush">
-                    <ListGroupItem>
-                      <strong>Poste:</strong>{" "}
-                      <Badge bg="primary">{employee.poste.title}</Badge>
-                    </ListGroupItem>
-                    <ListGroupItem>
-                      <strong>Service:</strong>{" "}
-                      {employee.poste.service?.name || 'Non spécifié'}
-                    </ListGroupItem>
-                    <ListGroupItem>
-                      <strong>Département:</strong>{" "}
-                      {employee.poste.service?.department?.name || 'Non spécifié'}
-                    </ListGroupItem>
-                  </ListGroup>
-                </Card>
-              )}
-            </div>
+                  </Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col md={4} className="fw-bold">Email:</Col>
+                  <Col md={8}>{employee.email}</Col>
+                </Row>
+              </ListGroup.Item>
+            </ListGroup>
           </div>
-        </Card.Body>
-      </Card>
-    </Container>
+
+          <div className="col-md-6">
+            <ListGroup>
+              <ListGroup.Item>
+                <Row>
+                  <Col md={4} className="fw-bold">Téléphone:</Col>
+                  <Col md={8}>{employee.telephone}</Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col md={4} className="fw-bold">Adresse:</Col>
+                  <Col md={8}>{employee.adresse}</Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col md={4} className="fw-bold">Date Embauche:</Col>
+                  <Col md={8}>
+                    {new Date(employee.dateEmbauche).toLocaleDateString()}
+                  </Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col md={4} className="fw-bold">RIB:</Col>
+                  <Col md={8}>{employee.rib}</Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col md={4} className="fw-bold">Banque:</Col>
+                  <Col md={8}>{employee.banque}</Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col md={4} className="fw-bold">CNSS:</Col>
+                  <Col md={8}>{employee.cnss}</Col>
+                </Row>
+              </ListGroup.Item>
+            </ListGroup>
+          </div>
+        </div>
+
+        <div className="mt-4">
+          <h5>Informations Professionnelles</h5>
+          <Row className="g-3">
+            <Col md={4}>
+              <div className="p-3 border rounded">
+                <h6 className="text-muted">Département</h6>
+                <Badge bg="info" className="fs-6">
+                  {employee?.poste?.service?.department?.name || 'Non défini'}
+                </Badge>
+              </div>
+            </Col>
+            
+            <Col md={4}>
+              <div className="p-3 border rounded">
+                <h6 className="text-muted">Service</h6>
+                <Badge bg="secondary" className="fs-6">
+                  {employee?.poste?.service?.name || 'Non défini'}
+                </Badge>
+              </div>
+            </Col>
+            
+            <Col md={4}>
+              <div className="p-3 border rounded">
+                <h6 className="text-muted">Poste</h6>
+                <Badge bg="primary" className="fs-6">
+                  {employee?.poste?.title || 'Non défini'}
+                </Badge>
+              </div>
+            </Col>
+          </Row>
+        </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={onHide}>
+          Fermer
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 
