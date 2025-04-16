@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { HiOutlineLogout } from "react-icons/hi";
 import { useLocation } from "react-router-dom";
 import "./Navbar.css";
 
@@ -35,9 +36,18 @@ return (
           </div>
         </div>
 
-        <div className="d-none d-lg-block">
+        <div className="d-none d-lg-block me-2">
           <Link className="btn btn-primary" to="/login">Login</Link>
         </div>
+        <button className="btn btn-outline-danger"
+          onClick={() => {
+            localStorage.removeItem("token");
+            localStorage.removeItem("utilisateurId");
+            localStorage.removeItem("typeUtilisateur");
+            window.location.href = "/login";
+          }}>
+          <HiOutlineLogout size={20} />Logout
+        </button>
       </div>
     </nav>
   );

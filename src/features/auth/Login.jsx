@@ -19,14 +19,13 @@ export default function Login() {
         password,
       });
 
-      // ✅ Stockage du token JWT dans localStorage
       const { token, utilisateurId, typeUtilisateur } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem("utilisateurId", utilisateurId);
       localStorage.setItem("typeUtilisateur", typeUtilisateur);
 
       console.log("Connexion réussie !");
-      navigate("/"); // rediriger après login
+      navigate("/"); 
     } catch (error) {
       if (error.response?.status === 401) {
         setError("Nom d'utilisateur ou mot de passe incorrect.");

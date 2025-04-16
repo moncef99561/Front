@@ -14,7 +14,7 @@ function ResponsableLayout() {
   return (
     <div className="d-flex" style={{ minHeight: "100vh" }}>
       <Sidebar />
-      <div className="flex-grow-1">
+      <div className="flex-grow-1 bg-light">
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/employees" element={<EmployeeList />} />
@@ -23,7 +23,6 @@ function ResponsableLayout() {
           <Route path="/departments" element={<DepartmentList />} />
           <Route path="/services" element={<ServiceList />} />
           <Route path="/postes" element={<PosteList />} />
-
           {/* <Route path="/interviews" element={<InterviewList />} /> */}
         </Routes>
       </div>

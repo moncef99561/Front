@@ -87,7 +87,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="dashboard-container bg-light">
+    <div className="dashboard-container">
       <div className="max-w-7xl mx-auto">
         <h2 className="dashboard-header">Tableau de Bord RH</h2>
 
