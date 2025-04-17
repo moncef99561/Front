@@ -86,13 +86,13 @@ const JobOfferList = () => {
 
   return (
     <Container className="mt-5">
-      <h1 className="text-center mb-4 text-primary">Gestion des Offres d'Emploi</h1>
+      <h1 className="text-center mb-4">Gestion des Offres d'Emploi</h1>
       
       {/* Afficher les erreurs */}
       {error && <Alert variant="danger" className="text-center">{error}</Alert>}
 
       {/* Bouton pour ajouter une offre d'emploi */}
-      <div className="d-flex justify-content-end mb-3">
+      <div className="d-flex justify-content-start mb-3">
         <Button 
           variant="primary" 
           onClick={() => {
@@ -105,7 +105,7 @@ const JobOfferList = () => {
             setShowModal(true);
           }}
         >
-          Ajouter Offre d'Emploi
+          Ajouter Offre 
         </Button>
       </div>
 

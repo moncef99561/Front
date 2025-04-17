@@ -23,7 +23,7 @@ const JobOfferTable = ({ jobOffers, handleEdit, handleDelete }) => {
             <td>{new Date(jobOffer.publicationDate).toLocaleDateString()}</td>
             <td className="text-center">
               <Button 
-                variant="outline-warning" 
+                variant="warning" 
                 className="me-2"
                 onClick={() => handleEdit(jobOffer)}
                 aria-label="Modifier"
@@ -31,7 +31,7 @@ const JobOfferTable = ({ jobOffers, handleEdit, handleDelete }) => {
                 <FaEdit />
               </Button>
               <Button 
-                variant="outline-danger"
+                variant="danger"
                 onClick={() => handleDelete(jobOffer.jobOfferId)}
                 aria-label="Supprimer"
               >
