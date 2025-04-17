@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Modal, Table, Button, Alert, ListGroup, Badge } from 'react-bootstrap';
+import { Table, Button, Alert } from 'react-bootstrap';
 import { FaEdit, FaTrash, FaInfoCircle } from 'react-icons/fa';
+
 import api from '../../services/api';
 import AddDepartement from './AddDepartement';
 import EditDepartement from './EditDepartement';
+import DetailDepartment from './DetailDepartment';
 
 const DepartmentList = () => {
   const [departments, setDepartments] = useState([]);
@@ -78,6 +80,8 @@ const DepartmentList = () => {
 
   return (
     <div className="container mt-4">
+      <h1 className="text-center mt-32 mb-5">Gestion des Départements</h1>
+
       {error && <Alert variant="danger">{error}</Alert>}
 
       <Button variant="primary" onClick={handleOpenAdd}>
@@ -131,43 +135,12 @@ const DepartmentList = () => {
         />
       )}
 
-      <Modal show={!!selectedDepartment} onHide={() => setSelectedDepartment(null)} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>Détails du Département</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedDepartment && (
-            <div>
-              <h4>{selectedDepartment.name}</h4>
-              <div className="mb-3">
-                <h5>Description</h5>
-                <p>{selectedDepartment.description}</p>
-              </div>
-              <div className="mb-3">
-                <h5>Détails complémentaires</h5>
-                <p>{selectedDepartment.detail || "Aucun détail supplémentaire"}</p>
-              </div>
-              <h5 className="mt-4">Services associés :</h5>
-              <ListGroup>
-                {selectedDepartment.services?.map(service => (
-                  <ListGroup.Item key={service.serviceId}>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <div>
-                        <h6>{service.name}</h6>
-                        <small className="text-muted">
-                          Postes : {service.postes?.map(p => p.title).join(', ')}
-                        </small>
-                      </div>
-                      <Badge pill>{service.postes?.length || 0}</Badge>
-                    </div>
-                  </ListGroup.Item>
-                ))}
-              </ListGroup>
-            </div>
-          )}
-        </Modal.Body>
-      </Modal>
+<DetailDepartment 
+  department={selectedDepartment}
+  onHide={() => setSelectedDepartment(null)}
+/>
     </div>
   );
 };
+
 export default DepartmentList;

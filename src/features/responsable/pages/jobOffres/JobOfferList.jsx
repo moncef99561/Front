@@ -92,7 +92,7 @@ const JobOfferList = () => {
       {error && <Alert variant="danger" className="text-center">{error}</Alert>}
 
       {/* Bouton pour ajouter une offre d'emploi */}
-      <div className="d-flex justify-content-start mb-3">
+      <div className="d-flex justify-content-start mb-1">
         <Button 
           variant="primary" 
           onClick={() => {
