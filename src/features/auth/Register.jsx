@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
 export default function Register() {
@@ -21,6 +22,8 @@ export default function Register() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     setError("");
@@ -71,6 +74,11 @@ export default function Register() {
         Adresse: "",
         Telephone: "",
       });
+  
+      // Rediriger après 1 seconde
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
   
     } catch (error) {
       setError("Une erreur est survenue. Veuillez réessayer.");
