@@ -3,7 +3,8 @@ import {
   Button, 
   Alert, 
   Container, 
-  Table 
+  Table,
+  Form
 } from 'react-bootstrap';
 import { 
   FaEdit, 
@@ -12,6 +13,7 @@ import {
   FaFileContract, 
   FaInfoCircle 
 } from 'react-icons/fa';
+//import { FaSearch } from 'react-icons/fa';
 import api from '../../services/api';
 import AddEmployee from './AddEmployee';
 import DetailEmployee from './DetailEmployee';
@@ -35,6 +37,12 @@ const EmployeeList = () => {
     dateEmbauche: '', rib: '', banque: '', cnss: '', departmentId: '', serviceId: '', posteId: ''
   });
   const [error, setError] = useState('');
+  const [searchTerm, setSearchTerm] = useState(''); // État pour la recherche
+
+  // Filtrer les employés selon le terme de recherche
+  const filteredEmployees = employees.filter(employee =>
+    employee.nom.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const fetchEmployees = useCallback(async () => {
     try {
@@ -183,6 +191,45 @@ const EmployeeList = () => {
     <Container className="mt-5">
       <h1 className="text-center mb-4">Gestion des Employés</h1>
       {error && <Alert variant="danger">{error}</Alert>}
+      
+      {/* Barre de recherche */}
+      <Form.Group className="mb-4 position-relative">
+  <div className="row">
+    <div className="col-md-6 mx-auto">
+      <div className="input-group">
+        {/* <span className="input-group-text bg-white border-end-0">
+          <FaSearch className="text-secondary" />
+        </span>*/}
+        <Form.Control
+          type="search"
+          placeholder="Rechercher un employé par nom..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="py-2 border-start-0"
+          style={{
+            borderRadius: '25px 0 0 25px',
+            borderLeft: 'none',
+            boxShadow: 'none'
+          }}
+        />
+        <button 
+          className="btn btn-outline-secondary border-start-0" 
+          type="button"
+          style={{
+            borderRadius: '0 25px 25px 0',
+            borderLeft: 'none'
+          }}
+          onClick={() => setSearchTerm('')}
+        >
+          ×
+        </button>
+      </div>
+    </div>
+  </div>
+</Form.Group>
+
+
+
       <Button variant="primary" className="mb-3" onClick={() => handleShowModal()}>
         Ajouter Employé
       </Button>
@@ -198,50 +245,58 @@ const EmployeeList = () => {
           </tr>
         </thead>
         <tbody>
-          {employees.map(employee => (
-            <tr key={employee.employeeId}>
-              <td>{employee.cin}</td>
-              <td>{employee.nom}</td>
-              <td>{employee.prenom}</td>
-              <td>{employee.email}</td>
-              <td>
-                <Button 
-                  variant="info" 
-                  className="me-2"
-                  onClick={() => handleShowAccountModal(employee)}
-                >
-                  <FaUser />
-                </Button>
-                <Button 
-                  variant="secondary" 
-                  className="me-2"
-                  onClick={() => handleShowContractModal(employee)}
-                >
-                  <FaFileContract />
-                </Button>
-                <Button 
-                  variant="warning" 
-                  className="me-2" 
-                  onClick={() => handleShowModal(employee)}
-                >
-                  <FaEdit />
-                </Button>
-                <Button 
-                  variant="danger" 
-                  className="me-2" 
-                  onClick={() => handleDelete(employee.employeeId)}
-                >
-                  <FaTrash />
-                </Button>
-                <Button 
-                  variant="success" 
-                  onClick={() => handleShowInfoModal(employee)}
-                >
-                  <FaInfoCircle />
-                </Button>
+          {filteredEmployees.length === 0 ? (
+            <tr>
+              <td colSpan="5" className="text-center">
+                Aucun employé trouvé
               </td>
             </tr>
-          ))}
+          ) : (
+            filteredEmployees.map(employee => (
+              <tr key={employee.employeeId}>
+                <td>{employee.cin}</td>
+                <td>{employee.nom}</td>
+                <td>{employee.prenom}</td>
+                <td>{employee.email}</td>
+                <td>
+                  <Button 
+                    variant="info" 
+                    className="me-2"
+                    onClick={() => handleShowAccountModal(employee)}
+                  >
+                    <FaUser />
+                  </Button>
+                  <Button 
+                    variant="secondary" 
+                    className="me-2"
+                    onClick={() => handleShowContractModal(employee)}
+                  >
+                    <FaFileContract />
+                  </Button>
+                  <Button 
+                    variant="warning" 
+                    className="me-2" 
+                    onClick={() => handleShowModal(employee)}
+                  >
+                    <FaEdit />
+                  </Button>
+                  <Button 
+                    variant="danger" 
+                    className="me-2" 
+                    onClick={() => handleDelete(employee.employeeId)}
+                  >
+                    <FaTrash />
+                  </Button>
+                  <Button 
+                    variant="success" 
+                    onClick={() => handleShowInfoModal(employee)}
+                  >
+                    <FaInfoCircle />
+                  </Button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </Table>
 
