@@ -139,13 +139,13 @@ const ContractTypeList = () => {
 
   return (
     <Container className="mt-5">
-      <h1 className="text-center mb-4 text-primary">Gestion des Types de Contrat</h1>
+      <h1 className="text-center mb-4 text-dark">Gestion des Types de Contrat</h1>
       
       {/* Afficher les erreurs */}
       {error && <Alert variant="danger" className="text-center">{error}</Alert>}
 
       {/* Bouton pour ajouter un type de contrat */}
-      <div className="d-flex justify-content-end mb-3">
+      <div className="d-flex justify-content-start mb-3">
         <Button 
           variant="primary" 
           onClick={() => {
@@ -157,7 +157,7 @@ const ContractTypeList = () => {
             setShowModal(true);
           }}
         >
-          Ajouter un Type de Contrat
+          Ajouter un Type
         </Button>
       </div>
 
