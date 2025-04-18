@@ -11,6 +11,7 @@ const Sidebar = () => {
     { to: '/manager/', icon: <FaHome />, text: 'Tableau de Bord' },
     { to: '/manager/projet', icon: <FaBriefcase />, text: 'Projet' },
     { to: '/manager/tache', icon: <FaFileContract />, text: 'Tâches' },
+    { to: '/manager/evaluation', icon: <FaFileContract />, text: 'Evaluation' },
     { to: '/manager/equipe', icon: <FaUsers />, text: 'Equipes' },
     { to: '/manager/addManager', icon: <FaUser />, text: 'Manager' },
     { to: '/manager/conge', icon: <FaBuilding />, text: 'Congés' },

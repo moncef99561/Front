@@ -15,9 +15,9 @@ function ManagerLayout() {
       <div className="flex-grow-1 bg-light">
         <Routes>
           {/* <Route path="/" element={<Dashboard />} /> */}
-          <Route path="/equipe" element={<PageAjouterEquipe />} />
           <Route path="/evaluation" element={<PageAjouterEvaluationTache />} />
           <Route path="/addManager" element={<PageAjouterManager />} />
+          <Route path="/equipe" element={<PageAjouterEquipe />} />
           <Route path="/projet" element={<PageAjouterProjet />} />
           <Route path="/tache" element={<PageAjouterTache />} />
         </Routes>
