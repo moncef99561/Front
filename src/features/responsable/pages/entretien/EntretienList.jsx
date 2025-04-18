@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Alert, Spinner } from 'react-bootstrap';
-import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 import api from '../../services/api';
 import AddEntretien from './AddEntretien';
 import EditEntretien from './EditEntretien';
@@ -52,10 +52,11 @@ const EntretienList = () => {
 
     return (
         <div className="container mt-4">
+      <h1 className="text-center mt-32 mb-5">Planification des Entretiens</h1>
             {error && <Alert variant="danger" onClose={() => setError('')} dismissible>{error}</Alert>}
 
-            <Button onClick={() => setShowAddModal(true)} className="mb-3">
-                <FaPlus className="me-2" /> Ajouter Entretien
+            <Button variant="primary" onClick={() => setShowAddModal(true)} className="mb-3">
+                Ajouter Entretien
             </Button>
 
             <Table striped bordered hover responsive>

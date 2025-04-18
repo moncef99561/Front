@@ -135,10 +135,10 @@ const DepartmentList = () => {
         />
       )}
 
-<DetailDepartment 
-  department={selectedDepartment}
-  onHide={() => setSelectedDepartment(null)}
-/>
+      <DetailDepartment 
+        department={selectedDepartment}
+        onHide={() => setSelectedDepartment(null)}
+      />
     </div>
   );
 };

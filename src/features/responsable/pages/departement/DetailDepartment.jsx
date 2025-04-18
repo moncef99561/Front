@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Badge, ListGroup } from 'react-bootstrap';
+import { Modal, Badge } from 'react-bootstrap';
 import { FaBuilding, FaInfoCircle, FaListAlt, FaCogs } from 'react-icons/fa';
 
 const DetailDepartment = ({ department, onHide }) => {

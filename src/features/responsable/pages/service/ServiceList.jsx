@@ -67,6 +67,7 @@ const ServiceList = () => {
 
   return (
     <div className="container mt-4">
+      <h1 className="text-center mt-32 mb-5">Gestion des Services</h1>
       {error && <Alert variant="danger">{error}</Alert>}
 
       <Button variant="primary" onClick={() => {
