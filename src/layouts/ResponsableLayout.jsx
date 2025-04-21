@@ -13,6 +13,7 @@ import ListDemandeConges from "../features/responsable/pages/conge/ListDemandeCo
 // import { GuardedRoute } from "../middleware/Guards";
 import EntretienList from "../features/responsable/pages/entretien/EntretienList";
 import ListAbsence from "../features/responsable/pages/absence/ListAbsence";
+//import ChatPage from "../features/responsable/pages/chat/chatPage";
 
 function ResponsableLayout() {
   return (
@@ -31,6 +32,10 @@ function ResponsableLayout() {
           <Route path="/detail/:employeeId" element={<DetailEmployee />} />
           <Route path="/demandes-conges" element={<ListDemandeConges />} />
           <Route path="/absences" element={<ListAbsence />} />
+          {/* <Route path="/chat" element={<ChatPage />} />
+          <Route path="/chat" element={<ChatPage currentUser={{ userId: "1", name: "Admin" }} />} /> */}
+
+
         </Routes>
       </div>
     </div>

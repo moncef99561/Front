@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Table, Button, Alert } from "react-bootstrap";
-import { getDemandesCongesEnAttente, updateStatutDemande } from "../../services/api2";
+import { getDemandesCongesEnAttente, updateStatutDemande } from "../services/api2";
 
 const ListDemandeConges = () => {
   const [demandes, setDemandes] = useState([]);

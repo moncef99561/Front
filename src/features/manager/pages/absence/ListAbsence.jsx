@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllAbsences } from "../../services/api2";
+import { getAllAbsences } from "../services/api2";
 import { Table, Alert } from "react-bootstrap";
 
 

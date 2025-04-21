@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FaUsers, FaUserTimes, FaBriefcase, FaFileContract, FaBuilding, FaCogs, FaUserTie, FaHome, FaCalendarAlt, FaSignOutAlt, FaRegCalendarCheck } from 'react-icons/fa';
+import { FaUsers, FaComments, FaUserTimes, FaBriefcase, FaFileContract, FaBuilding, FaCogs, FaUserTie, FaHome, FaCalendarAlt, FaSignOutAlt, FaRegCalendarCheck } from 'react-icons/fa';
 import './Sidebar.css';
+
 
 const Sidebar = () => {
   const [selectedItem, setSelectedItem] = useState('/dashboard');
@@ -18,6 +19,8 @@ const Sidebar = () => {
     { to: '/responsable/entretiens', icon: <FaCalendarAlt />, text: 'Entretiens' },
     { to: '/responsable/demandes-conges', icon: <FaRegCalendarCheck />, text: 'Congés Employés' },
     { to: '/responsable/absences', icon: <FaUserTimes />, text: 'Absences' },
+    { to: '/responsable/chat', icon: <FaComments />, text: 'Messagerie' },
+
 
   ];
 
