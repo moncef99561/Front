@@ -1,7 +1,11 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Dashboard from "../features/responsable/components/dashboard/Dashboard";
-import Sidebar from "../features/responsable/components/sidebar/Sidebar";
+import Sidebar from "../features/manager/components/sidebar/Sidebar";
+import PageAjouterEquipe from "../features/manager/pages/PageAjouterEquipe"
+import PageAjouterEvaluationTache from "../features/manager/pages/PageAjouterEvaluationTache"
+import PageAjouterManager from "../features/manager/pages/PageAjouterManager"
+import PageAjouterProjet from "../features/manager/pages/PageAjouterProjet"
+import PageAjouterTache from "../features/manager/pages/PageAjouterTache"
 // import { GuardedRoute } from "../middleware/Guards";
 
 function ManagerLayout() {
@@ -10,7 +14,12 @@ function ManagerLayout() {
       <Sidebar />
       <div className="flex-grow-1 bg-light">
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          {/* <Route path="/" element={<Dashboard />} /> */}
+          <Route path="/evaluation" element={<PageAjouterEvaluationTache />} />
+          <Route path="/addManager" element={<PageAjouterManager />} />
+          <Route path="/equipe" element={<PageAjouterEquipe />} />
+          <Route path="/projet" element={<PageAjouterProjet />} />
+          <Route path="/tache" element={<PageAjouterTache />} />
         </Routes>
       </div>
     </div>
