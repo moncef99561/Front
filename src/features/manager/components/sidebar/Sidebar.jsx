@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FaUsers, FaBriefcase, FaFileContract, FaBuilding, FaCogs, FaHome, FaSignOutAlt, FaUser } from 'react-icons/fa';
+import { FaUsers, FaBriefcase, FaFileContract, FaUserTimes, FaRegCalendarCheck, FaHome, FaSignOutAlt, FaUser } from 'react-icons/fa';
 import './Sidebar.css';
 
 const Sidebar = () => {
@@ -14,8 +14,9 @@ const Sidebar = () => {
     { to: '/manager/evaluation', icon: <FaFileContract />, text: 'Evaluation' },
     { to: '/manager/equipe', icon: <FaUsers />, text: 'Equipes' },
     { to: '/manager/addManager', icon: <FaUser />, text: 'Manager' },
-    { to: '/manager/conge', icon: <FaBuilding />, text: 'Congés' },
-    { to: '/manager/absence', icon: <FaCogs />, text: 'Absence' },
+    { to: '/manager/demandes-conges', icon: <FaRegCalendarCheck />, text: 'Congés Employés' },
+    { to: '/manager/absences', icon: <FaUserTimes />, text: 'Absences' },
+    // { to: '/manager/chat', icon: <FaComments />, text: 'Messagerie' },
 
   ];
 
