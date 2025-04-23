@@ -93,16 +93,16 @@ export default function Register() {
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
       <form 
         className="bg-white p-4 rounded shadow-sm" 
-        style={{ maxWidth: "500px", width: "100%" }} 
+        style={{ maxWidth: "600px", width: "100%" }} 
         onSubmit={handleSubmit}
       >
-        <h2 className="text-center fw-bold mb-4">Register</h2>
+        <h2 className="text-center fw-bold mb-4">S'inscription</h2>
   
         {error && <p className="text-danger text-center">{error}</p>}
         {success && <p className="text-success text-center">{success}</p>}
   
-        <div className="d-flex">
-          <div className="col-5 me-5">
+        <div className="d-flex gap-3 justify-content-center">
+          <div className="col-6">
             <div className="mb-3">
               <input type="text" className="form-control" placeholder="CIN" name="Cin" value={formData.Cin} onChange={handleChange} required />
             </div>
@@ -131,7 +131,7 @@ export default function Register() {
             </div>
           </div>
   
-          <div className="col-5">
+          <div className="col-6">
             <div className="mb-3">
               <input type="email" className="form-control" placeholder="Email" name="Email" value={formData.Email} onChange={handleChange} required />
             </div>

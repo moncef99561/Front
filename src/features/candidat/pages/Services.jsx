@@ -1,50 +1,57 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Briefcase, Users, FileText, Globe, Star, ShieldCheck } from "lucide-react";
+import {
+  Briefcase,
+  Users,
+  FileText,
+  Globe,
+  Star,
+  ShieldCheck,
+} from "lucide-react";
 
 export default function Services() {
   const services = [
     {
       icon: <Briefcase size={32} className="text-primary" />,
-      title: "Job Placement",
-      description: "Connecting top talents with leading companies to ensure the perfect match.",
+      title: "Placement professionnel",
+      description: "Nous mettons en relation les meilleurs talents avec les entreprises les plus ambitieuses.",
     },
     {
       icon: <Users size={32} className="text-primary" />,
-      title: "HR Consulting",
-      description: "Providing HR solutions tailored to your company’s needs and culture.",
+      title: "Conseil RH",
+      description: "Des solutions en ressources humaines adaptées à vos besoins et à votre culture d’entreprise.",
     },
     {
       icon: <FileText size={32} className="text-primary" />,
-      title: "Resume Assistance",
-      description: "Helping candidates craft professional resumes that stand out.",
+      title: "Aide à la rédaction de CV",
+      description: "Nous vous aidons à créer un CV clair, professionnel et percutant.",
     },
     {
       icon: <Globe size={32} className="text-primary" />,
-      title: "International Opportunities",
-      description: "Facilitating job placements in global markets for career growth.",
+      title: "Opportunités à l’international",
+      description: "Accédez à des carrières à l’étranger pour enrichir votre expérience.",
     },
     {
       icon: <Star size={32} className="text-primary" />,
-      title: "Career Coaching",
-      description: "Personalized coaching to help you achieve your professional goals.",
+      title: "Coaching de carrière",
+      description: "Un accompagnement personnalisé pour atteindre vos objectifs professionnels.",
     },
     {
       icon: <ShieldCheck size={32} className="text-primary" />,
-      title: "Workplace Security",
-      description: "Ensuring safe and inclusive workplaces for all professionals.",
+      title: "Sécurité au travail",
+      description: "Nous favorisons des environnements de travail sûrs, inclusifs et bienveillants.",
     },
   ];
 
   return (
     <div className="container-fluid bg-light">
-      {/* Header */}
+      {/* En-tête */}
       <div className="bg-primary text-white text-center py-5">
-        <h1 className="fw-bold">Our Services</h1>
-        <p className="lead">Explore how we can help advance your career</p>
+        <h1 className="fw-bold">Nos services</h1>
+        <p className="lead">Découvrez comment nous vous aidons à faire évoluer votre carrière</p>
       </div>
 
-      {/* Services Section */}
+      {/* Section services */}
       <div className="container py-5">
         <div className="row g-4">
           {services.map((service, index) => (
@@ -53,17 +60,17 @@ export default function Services() {
                 <div className="mb-3">{service.icon}</div>
                 <h5 className="fw-bold">{service.title}</h5>
                 <p className="text-muted flex-grow-1">{service.description}</p>
-                <button className="btn btn-outline-primary mt-auto">Learn More</button>
+                <button className="btn btn-outline-primary mt-auto">En savoir plus</button>
               </div>
             </div>
           ))}
         </div>
 
-        {/* CTA Section */}
+        {/* Section d'appel à l'action */}
         <div className="text-center mt-5">
-          <h3 className="fw-bold">Ready to take the next step?</h3>
-          <p className="text-muted">Join thousands of professionals who trust us for their career growth.</p>
-          <button className="btn btn-primary px-4 py-2">Get Started</button>
+          <h3 className="fw-bold">Prêt(e) à franchir une nouvelle étape ?</h3>
+          <p className="text-muted">Rejoignez des milliers de professionnels qui nous font confiance.</p>
+          <button className="btn btn-primary px-4 py-2">Commencer</button>
         </div>
       </div>
     </div>
