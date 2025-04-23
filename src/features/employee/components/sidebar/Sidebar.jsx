@@ -9,10 +9,10 @@ const Sidebar = () => {
 
   const menuItems = [
     { to: '/employee/', icon: <FaHome />, text: 'Tableau de Bord' },
-    { to: '/employee/profil', icon: <FaUsers />, text: 'Profil' },
+    //{ to: '/employee/profil', icon: <FaUsers />, text: 'Profil' },
 
-    { to: '/employee/conges', icon: <FaRegCalendarCheck />, text: 'Projet' },
-    { to: '/employee/mes-taches', icon: <FaFileContract />, text: 'Tâches' },
+    { to: '/employee/conges', icon: <FaRegCalendarCheck />, text: 'Conges' },
+    { to: '/employee/ProjetTache', icon: <FaFileContract />, text: 'Projet & Taches' },
     // { to: '/manager/evaluation', icon: <FaFileContract />, text: 'Evaluation' },
     //{ to: '/employee/equipes', icon: <FaUsers />, text: 'Equipes' },
     // { to: '/manager/addManager', icon: <FaUser />, text: 'Manager' },
