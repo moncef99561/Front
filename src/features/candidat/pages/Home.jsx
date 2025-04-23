@@ -3,9 +3,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 const HeroSection = lazy(() => import("../components/home/HeroSection"));
 const FeatureSection = lazy(() => import("../components/home/FeatureSection"));
-const ServicesSection = lazy(() => import("../components/home/ServicesSection"));
+const AboutSection = lazy(() => import("../components/home/AboutSection"));
 const TestimonialSection = lazy(() => import("../components/home/TestimonialSection"));
-const TeamSection = lazy(() => import("../components/home/TeamSection"));
 const CTASection = lazy(() => import("../components/home/CTASection"));
 const Collaborator = lazy(() => import("../components/home/Collaborator"));
 
@@ -15,11 +14,10 @@ const Home = () => {
       
       <div className="home">
         <HeroSection />
+        <AboutSection />
         <Collaborator />
         <FeatureSection />
-        <ServicesSection />
         <TestimonialSection />
-        <TeamSection />
         <CTASection />
       </div>
     </Suspense>

@@ -1,4 +1,4 @@
-.collaborator-section {
+/* .collaborator-section {
     background: linear-gradient(to bottom, #e8f1ff, #ffffff);
   }
   
@@ -13,4 +13,14 @@
     filter: grayscale(100%);
     transform: scale(1.05);
   }
+   */
+
+.trusted-logo 
+{
+  max-width: 200px;
+  height: auto;
+  object-fit: contain;
+  margin: auto;
+  display: block;
+}
   
