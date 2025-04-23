@@ -24,43 +24,9 @@ function PublicLayout() {
         <Route  path="/candidature/:id" element={<Candidature />}/>
 
         {/* 🔐 Routes protégées */}
-<<<<<<< .mine
-        <Route
-          path="/profil"
-          element={
-            // <GuardedRoute>
-              <ProfilCandidat />
-            // </GuardedRoute>
-          }
-        />
-        {/* <Route
-          path="/candidature/:id"
-          element={
-            <GuardedRoute>
-              <Candidature />
-            </GuardedRoute>
-          }
-        /> */}
-=======
         <Route path="/profil" element={ <GuardedRoute> <ProfilCandidat /> </GuardedRoute>}/>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> .theirs
       </Routes>
-
       <Footer />
     </div>
   );
