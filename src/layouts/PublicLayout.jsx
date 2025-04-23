@@ -34,9 +34,9 @@ function PublicLayout() {
         <Route
           path="/profil"
           element={
-            <GuardedRoute>
+            // <GuardedRoute>
               <ProfilCandidat />
-            </GuardedRoute>
+            // </GuardedRoute>
           }
         />
         {/* <Route

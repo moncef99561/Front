@@ -8,16 +8,18 @@ const Sidebar = () => {
   const [selectedItem, setSelectedItem] = useState('/dashboard');
 
   const menuItems = [
-    { to: '/manager/', icon: <FaHome />, text: 'Tableau de Bord' },
-    { to: '/manager/projet', icon: <FaBriefcase />, text: 'Projet' },
-    { to: '/manager/taches', icon: <FaFileContract />, text: 'Tâches' },
+    { to: '/employee/', icon: <FaHome />, text: 'Tableau de Bord' },
+    { to: '/employee/profil', icon: <FaUsers />, text: 'Profil' },
+
+    { to: '/employee/conges', icon: <FaRegCalendarCheck />, text: 'Projet' },
+    { to: '/employee/mes-taches', icon: <FaFileContract />, text: 'Tâches' },
     // { to: '/manager/evaluation', icon: <FaFileContract />, text: 'Evaluation' },
-    { to: '/manager/equipes', icon: <FaUsers />, text: 'Equipes' },
+    //{ to: '/employee/equipes', icon: <FaUsers />, text: 'Equipes' },
     // { to: '/manager/addManager', icon: <FaUser />, text: 'Manager' },
-    { to: '/manager/demandes-conges', icon: <FaRegCalendarCheck />, text: 'Congés Employés' },
-    { to: '/manager/absences', icon: <FaUserTimes />, text: 'Absences' },
-    { to: '/manager/type-formation', icon: <FaLayerGroup  />, text: 'Type-Formation' },
-    { to: '/manager/formations', icon: <FaChalkboardTeacher  />, text: 'Formations' },
+    //{ to: '/employee/demandes-conges', icon: <FaRegCalendarCheck />, text: 'Congés Employés' },
+    { to: '/employee/absences', icon: <FaUserTimes />, text: 'Absences' },
+    { to: '/employee/demande-document', icon: <FaLayerGroup  />, text: 'Demande Document' },
+    { to: '/employee/formations', icon: <FaChalkboardTeacher  />, text: 'Formations' },
 
 
   ];

@@ -7,6 +7,7 @@ import Register from "./features/auth/Register";
 // Dans App.js ou main.jsx
 import "./middleware/Intercepteur"; // active l’intercepteur globalement
 import ManagerLayout from "./layouts/ManagerLayout";
+import EmployeeLayout from "./layouts/EmployeeLayout";
 
 // import DashboardRH from "./features/responsable/DashboardRH";
 // import Dashboard from "./features/responsable/Dashboard";
@@ -24,6 +25,8 @@ function App() {
         <Route path="/*" element={<PublicLayout />} />
         <Route path="/manager/*" element={<ManagerLayout />} />
         <Route path="/responsable/*" element={<ResponsableLayout />} />
+        <Route path="/employee/*" element={<EmployeeLayout />} />
+
 
         {/* 🔐 Exemple d'espace privé externe */}
         {/* <Route
