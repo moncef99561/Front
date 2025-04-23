@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { MapPin, Filter, Briefcase, Clock } from "lucide-react";
+import { Modal, Button } from "react-bootstrap";
 
 export default function Offers() {
   const navigate = useNavigate();
@@ -58,7 +59,6 @@ export default function Offers() {
     setCurrentPage(1);
   }, [selectedFilters, jobOffers]);
 
-  // Pagination - Calculer les offres à afficher sur la page actuelle
   const indexOfLastOffer = currentPage * offersPerPage;
   const indexOfFirstOffer = indexOfLastOffer - offersPerPage;
   const currentOffers = filteredOffers.slice(indexOfFirstOffer, indexOfLastOffer);
@@ -66,7 +66,6 @@ export default function Offers() {
 
   return (
     <div className="container-fluid bg-light">
-      {/* Section de recherche */}
       <div className="bg-primary text-white py-5 text-center">
         <div className="container">
           <h1 className="fw-bold">Trouvez votre emploi de rêve</h1>
@@ -82,14 +81,12 @@ export default function Offers() {
         </div>
       </div>
 
-      {/* Contenu principal */}
       <div className="container py-5">
         <div className="row">
           <div className="col-lg-3">
             <div className="bg-white rounded shadow-sm p-4">
               <h5><Filter size={20} className="me-2" />Filtres</h5>
 
-              {/* Type d'emploi */}
               <h6 className="mt-3">Type d'emploi</h6>
               <div className="form-check">
                 <input className="form-check-input" type="checkbox" checked={selectedFilters.type === "all"} onChange={() => setSelectedFilters({ ...selectedFilters, type: "all" })} />
@@ -102,7 +99,6 @@ export default function Offers() {
                 </div>
               ))}
 
-              {/* Catégorie */}
               <h6 className="mt-3">Catégorie</h6>
               <div className="form-check">
                 <input className="form-check-input" type="checkbox" checked={selectedFilters.category === "all"} onChange={() => setSelectedFilters({ ...selectedFilters, category: "all" })} />
@@ -115,7 +111,6 @@ export default function Offers() {
                 </div>
               ))}
 
-              {/* Expérience */}
               <h6 className="mt-3">Expérience</h6>
               <div className="form-check">
                 <input className="form-check-input" type="checkbox" checked={selectedFilters.experience === "all"} onChange={() => setSelectedFilters({ ...selectedFilters, experience: "all" })} />
@@ -130,7 +125,6 @@ export default function Offers() {
             </div>
           </div>
 
-          {/* Offres d'emploi */}
           <div className="col-lg-9">
             {loading ? (
               <p>Chargement des offres d'emploi...</p>
@@ -152,17 +146,23 @@ export default function Offers() {
                           <p className="text-muted mt-2">{job.description.substring(0, 100)}...</p>
                         </div>
                       </div>
-                      <button className="btn btn-primary btn-sm px-4 py-2 align-self-center" data-bs-toggle="modal" data-bs-target="#jobDetailModal" onClick={() => setSelectedJob(job)}>Plus</button>
+                      <button
+                        className="btn btn-primary btn-sm px-4 py-2 align-self-center"
+                        onClick={() => setSelectedJob(job)}
+                      >
+                        Plus
+                      </button>
                     </div>
                   </div>
                 ))}
 
-                {/* Pagination */}
                 <nav className="mt-4">
                   <ul className="pagination justify-content-center">
                     {[...Array(totalPages)].map((_, index) => (
                       <li key={index} className={`page-item ${index + 1 === currentPage ? "active" : ""}`}>
-                        <button className="page-link" onClick={() => setCurrentPage(index + 1)}>{index + 1}</button>
+                        <button className="page-link" onClick={() => setCurrentPage(index + 1)}>
+                          {index + 1}
+                        </button>
                       </li>
                     ))}
                   </ul>
@@ -173,34 +173,42 @@ export default function Offers() {
         </div>
       </div>
 
-      {/* MODALE POUR LES DÉTAILS */}
-      <div className="modal fade" id="jobDetailModal" tabIndex="-1" aria-hidden="true">
-  <div className="modal-dialog modal-lg">
-    <div className="modal-content">
-      {selectedJob && (
-        <>
-          <div className="modal-header">
-            <h5 className="modal-title">{selectedJob.titre}</h5>
-            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div className="modal-body">
-            <p><strong>Description :</strong> {selectedJob.description}</p>
-            <p><strong>Lieu :</strong> {selectedJob.lieu}</p>
-            <p><strong>Date de publication :</strong> {selectedJob.datePublication}</p>
-            <p><strong>Type de contrat :</strong> {selectedJob.typeContrat}</p>
-            <p><strong>Catégorie :</strong> {selectedJob.categorieTravail}</p>
-            <p><strong>Niveau d'expérience :</strong> {selectedJob.experience}</p>
-            <p><strong>Exigences :</strong> {selectedJob.exigences}</p>
-            <p><strong>Salaire :</strong> {selectedJob.salaire}</p>
-          </div>
-          <div className="modal-footer">
-            <button type="button" className="btn btn-success" onClick={() => navigate(`/Candidature/${selectedJob.offreEmploiId}`)}> Postuler </button>
-          </div>
-        </>
-      )}
-    </div>
-  </div>
-</div>
+      {/* ✅ MODALE AVEC REACT-BOOTSTRAP */}
+      <Modal show={!!selectedJob} onHide={() => setSelectedJob(null)} centered size="lg">
+        {selectedJob && (
+          <>
+            <React.Fragment key={selectedJob.offreEmploiId}></React.Fragment>
+            <Modal.Header closeButton>
+              <Modal.Title>{selectedJob.titre}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p><strong>Id :</strong> {selectedJob.offreEmploiId}</p>
+              <p><strong>Description :</strong> {selectedJob.description}</p>
+              <p><strong>Lieu :</strong> {selectedJob.lieu}</p>
+              <p><strong>Date de publication :</strong> {selectedJob.dateCreation}</p>
+              <p><strong>Type de contrat :</strong> {selectedJob.typeContrat}</p>
+              <p><strong>Catégorie :</strong> {selectedJob.categorieTravail}</p>
+              <p><strong>Niveau d'expérience :</strong> {selectedJob.experience}</p>
+              <p><strong>Exigences :</strong> {selectedJob.exigences}</p>
+              <p><strong>Salaire :</strong> {selectedJob.salaire}</p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setSelectedJob(null)}>Fermer</Button>
+              <Button
+                variant="success"
+                onClick={() => {
+                  setSelectedJob(null);
+                  setTimeout(() => {
+                    navigate(`/candidature/${selectedJob.offreEmploiId}`);
+                  }, 200);
+                }}
+              >
+                Postuler
+              </Button>
+            </Modal.Footer>
+          </>
+        )}
+      </Modal>
     </div>
   );
 }

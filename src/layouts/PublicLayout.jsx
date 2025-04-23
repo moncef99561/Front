@@ -23,32 +23,12 @@ function PublicLayout() {
         <Route path="/offers" element={<Offers />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/services" element={<Services />} />
-        <Route  path="/candidature/:id" element={
-            // <GuardedRoute>
-              <Candidature />
-            // </GuardedRoute>
-          }
-        />
+        <Route  path="/candidature/:id" element={<Candidature />}/>
 
         {/* 🔐 Routes protégées */}
-        <Route
-          path="/profil"
-          element={
-            <GuardedRoute>
-              <ProfilCandidat />
-            </GuardedRoute>
-          }
-        />
-        {/* <Route
-          path="/candidature/:id"
-          element={
-            <GuardedRoute>
-              <Candidature />
-            </GuardedRoute>
-          }
-        /> */}
-      </Routes>
+        <Route path="/profil" element={ <GuardedRoute> <ProfilCandidat /> </GuardedRoute>}/>
 
+      </Routes>
       <Footer />
     </div>
   );

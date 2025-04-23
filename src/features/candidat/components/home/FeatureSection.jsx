@@ -12,8 +12,8 @@ const FeatureSection = () => {
               <div className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style={{ width: "60px", height: "60px" }}>
                 <i className="fas fa-briefcase fa-2x"></i>
               </div>
-              <h3 className="h5">10,000+ Jobs</h3>
-              <p className="text-muted">Access thousands of job opportunities updated daily</p>
+              <h3 className="h5">100+ Offres</h3>
+              <p className="text-muted">Accédez à des milliers d'offres d'emploi mises à jour quotidiennement</p>
             </div>
           </div>
           <div className="col-md-4">
@@ -21,8 +21,8 @@ const FeatureSection = () => {
               <div className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style={{ width: "60px", height: "60px" }}>
                 <i className="fas fa-users fa-2x"></i>
               </div>
-              <h3 className="h5">Top Companies</h3>
-              <p className="text-muted">Collaborate with leading companies in the industry</p>
+              <h3 className="h5">Meilleures entreprises</h3>
+              <p className="text-muted">Collaborez avec les entreprises les plus reconnues du secteur</p>
             </div>
           </div>
           <div className="col-md-4">
@@ -30,8 +30,8 @@ const FeatureSection = () => {
               <div className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style={{ width: "60px", height: "60px" }}>
                 <i className="fas fa-chart-line fa-2x"></i>
               </div>
-              <h3 className="h5">Career Growth</h3>
-              <p className="text-muted">Develop your career with opportunities for growth</p>
+              <h3 className="h5">Évolution de carrière</h3>
+              <p className="text-muted">Faites évoluer votre carrière grâce à de réelles opportunités de développement</p>
             </div>
           </div>
         </div>
