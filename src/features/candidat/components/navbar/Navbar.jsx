@@ -1,45 +1,63 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-// import { HiOutlineLogout } from "react-icons/hi";
-import { useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { FaUserCircle } from "react-icons/fa";
 import "./Navbar.css";
 
-const Navbar = () => {
+export default function Navbar() {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const username = localStorage.getItem("username");
 
-  const location = useLocation();
-
-  if (location.pathname === "/login" || location.pathname === "/register") {
-    return null;
-  }
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
 
   return (
-    <nav className="navbar navbar-expand-lg">
-      <div className="container-fluid py-2 px-5">
-        <Link className="navbar-brand fs-3" to="/"> <span className="text-primary">Work </span> Wise</Link>
+    <nav className="navbar navbar-expand-lg bg-white px-4 ">
+      <Link className="navbar-brand fs-2" to="/">Work <span className="text-primary">Wise</span></Link>
 
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Basculer la navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
+      <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span className="navbar-toggler-icon"></span>
+      </button>
 
-        <div className="collapse navbar-collapse justify-content-center fs-5" id="navbarNav">
-          <ul className="navbar-nav">
-            <li className="nav-item"><Link className="nav-link" to="/">Accueil</Link></li>
-            <li className="nav-item"><Link className="nav-link" to="/about">À propos</Link></li>
-            <li className="nav-item"><Link className="nav-link" to="/contact">Contact</Link></li>
-          </ul>
+      <div className="collapse navbar-collapse" id="navbarNav">
+        <ul className="navbar-nav ms-auto me-5">
+          <li className="nav-item">
+            <Link className="nav-link" to="/">Accueil</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/about">À propos</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/services">Services</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/contact">Contact</Link>
+          </li>
+        </ul>
 
-          <div className="d-lg-none mt-3 text-center">
-            <Link className="btn btn-primary w-100 fs-6" to="/login">Connexion</Link>
+        {!token ? (
+          <Link className="btn btn-outline-primary" to="/login">Se connecter</Link>
+        ) : (
+          <div className="dropdown">
+            <button
+              className="btn border-0 dropdown-toggle d-flex align-items-center"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <FaUserCircle size={26} className="me-2 text-primary" />
+              <span className="d-none d-md-inline">{username || "Profil"}</span>
+            </button>
+            <ul className="dropdown-menu dropdown-menu-end">
+              <li><Link className="dropdown-item" to="/profile">Mon profil</Link></li>
+              <li><hr className="dropdown-divider" /></li>
+              <li><button className="dropdown-item text-danger" onClick={handleLogout}>Se déconnecter</button></li>
+            </ul>
           </div>
-        </div>
-
-        <div className="d-none d-lg-block me-2">
-          <Link className="btn btn-primary" to="/login">Connexion</Link>
-        </div>
+        )}
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}
