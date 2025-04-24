@@ -95,7 +95,7 @@ export default function Offers() {
             ) : (
               <>
                 {currentOffers.map((job) => (
-                  <OfferCard key={job.id} job={job} onSelect={setSelectedJob} />
+                  <OfferCard key={job.offerEmloiId} job={job} onSelect={setSelectedJob} />
                 ))}
                 <OffersPagination
                   totalPages={totalPages}
@@ -110,9 +110,9 @@ export default function Offers() {
       <OfferDetailsModal
         job={selectedJob}
         onClose={() => setSelectedJob(null)}
-        onApply={(id) => {
+        onApply={(offerEmloiId) => {
           setSelectedJob(null);
-          setTimeout(() => navigate(`/candidature/${id}`), 200);
+          setTimeout(() => navigate(`/candidature/${offerEmloiId}`), 200);
         }}
       />
     </div>

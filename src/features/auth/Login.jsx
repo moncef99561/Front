@@ -20,12 +20,16 @@ export default function Login() {
       });
 
       const { token, utilisateurId, typeUtilisateur } = response.data;
+
+      // ✅ Stocker les informations dans le localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("utilisateurId", utilisateurId);
       localStorage.setItem("typeUtilisateur", typeUtilisateur);
 
       console.log("Connexion réussie !");
-      navigate("/"); 
+
+      // ✅ Rediriger l'utilisateur vers la page d'accueil ou tableau de bord
+      navigate("/");
     } catch (error) {
       if (error.response?.status === 401) {
         setError("Nom d'utilisateur ou mot de passe incorrect.");

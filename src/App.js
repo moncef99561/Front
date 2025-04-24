@@ -4,13 +4,8 @@ import PublicLayout from "./layouts/PublicLayout";
 import ResponsableLayout from "./layouts/ResponsableLayout";
 import Login from "./features/auth/Login";
 import Register from "./features/auth/Register";
-// Dans App.js ou main.jsx
-import "./middleware/Intercepteur"; // active l’intercepteur globalement
 import ManagerLayout from "./layouts/ManagerLayout";
 import EmployeeLayout from "./layouts/EmployeeLayout";
-
-// import DashboardRH from "./features/responsable/DashboardRH";
-// import Dashboard from "./features/responsable/Dashboard";
 // import { GuardedRoute } from "./middleware/Guards";
 
 function App() {

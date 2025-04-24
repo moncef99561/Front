@@ -112,8 +112,19 @@ return (
                 {lettreMotivationFile && <div className="form-text mt-1">Fichier sélectionné : {lettreMotivationFile.name}</div>}
               </div>
 
-              <button type="submit" className="btn btn-primary w-100 fw-semibold" disabled={loading}>
-                {loading ? "⏳ Envoi en cours..." : "Envoyer ma candidature"}
+              {/* <button type="submit" className="btn btn-primary w-100 fw-semibold" disabled={loading}>
+                {loading ? "⏳ Envoi en cours..." : "Envoyer"}
+              </button> */}
+
+                <button type="submit" className="btn btn-primary w-100 fw-semibold" disabled={loading}>
+                {loading ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Envoi en cours...
+                  </>
+                ) : (
+                  "Envoyer"
+                )}
               </button>
             </form>
           </div>

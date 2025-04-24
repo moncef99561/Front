@@ -1,4 +1,3 @@
-// intercepteurs/intercepteur.js
 import axios from "axios";
 
 axios.interceptors.request.use((config) => {

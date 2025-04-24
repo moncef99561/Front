@@ -11,7 +11,7 @@ export default function OfferCard({ job, onSelect }) {
             <Briefcase size={28} />
           </div>
           <div>
-            <h5 className="mb-1 fw-bold">{job.titre}</h5>
+            <h5 className="mb-1 fw-bold">{job.offreEmploiId} : {job.titre}</h5>
             <div className="text-muted small">
               <MapPin size={16} className="me-1" /> {job.lieu}
               <span className="ms-3">
