@@ -2,6 +2,11 @@ import React from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Sidebar from "../features/employee/components/sidebar/Sidebar";
 import ProfilEmployee from "../features/employee/page/ProfilEmployee";
+import ProjetTachesEmploye from "../features/employee/page/ProjetTachesEmploye";
+import DemandeConge from "../features/employee/page/DemandeConge";
+import AbsencesEmploye from "../features/employee/page/AbsencesEmploye";
+import FormationsEmploye from "../features/employee/page/FormationsEmploye";
+import DashboardEmploye from "../features/employee/page/DashboardEmploye";
 import { Image } from "react-bootstrap";
 
 const employeeMock = {
@@ -36,14 +41,15 @@ function EmployeeLayout() {
 
         <div className="p-3">
           <Routes>
+          <Route path="/" element={<DashboardEmploye />} />
             <Route path="/profil" element={<ProfilEmployee />} />
             {/* Autres routes à ajouter ici */}
             {/* <Route path="/equipe" element={<PageAjouterEquipe />} /> */}
-            {/* <Route path="/projet" element={<ListProjet />} />
-            <Route path="/taches" element={<ListTaches />} />
-            <Route path="/demande-document" element={<ListDemandeConges />} />
-            <Route path="/absences" element={<ListAbsence />} />
-            <Route path="/equipes" element={<ListEquipe />} />
+             <Route path="/projetTache" element={<ProjetTachesEmploye />} />
+            <Route path="/conges" element={<DemandeConge />} />
+            <Route path="/absences" element={<AbsencesEmploye />} />
+            <Route path="/formations" element={<FormationsEmploye />} />
+            {/* <Route path="/equipes" element={<ListEquipe />} />
             <Route path="/type-formation" element={<ListTypeFormation />} />
             <Route path="/formations" element={<ListFormation />} /> */}
             {/* <Route path="/chat" element={<chatPage currentUser={{ userId: "1", name: "Admin" }} />} /> */}

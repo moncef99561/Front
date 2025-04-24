@@ -27,7 +27,6 @@ function PublicLayout() {
         <Route path="/profil" element={ <GuardedRoute> <ProfilCandidat /> </GuardedRoute>}/>
 
       </Routes>
-
       <Footer />
     </div>
   );
