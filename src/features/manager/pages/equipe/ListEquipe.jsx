@@ -11,6 +11,11 @@ const employesFictifs = [
   { id: 3, nom: 'Arbib', prenom: 'Oualid' },
   { id: 4, nom: 'MOKHTARI', prenom: 'Oumayma' },
   { id: 5, nom: 'AMARA', prenom: 'Hamza' },
+  { id: 6, nom: 'Kodak', prenom: 'Naoufal' },
+  { id: 7, nom: 'Bensfia', prenom: 'Mouad' },
+  { id: 8, nom: 'Bousfiha', prenom: 'Asmae' },
+  { id: 9, nom: 'Diab', prenom: 'Rim' },
+  { id: 10, nom: 'Draoui', prenom: 'Maryem' },
 
 ];
 

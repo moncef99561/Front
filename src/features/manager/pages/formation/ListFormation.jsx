@@ -11,9 +11,9 @@ const formateursMock = [
 ];
 
 const typesMock = [
-  { id: 1, nom: "Leadership" },
-  { id: 2, nom: "Cybersécurité" },
-  { id: 3, nom: "Communication" }
+  { id: 1, nom: "Présentiel" },
+  { id: 2, nom: "En ligne" },
+  { id: 3, nom: "Hybride" }
 ];
 
 const ListFormation = () => {
