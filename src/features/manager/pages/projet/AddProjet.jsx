@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import axios from 'axios';
 
-const EditProjet = ({ show, handleClose, projetData, reloadProjets }) => {
+const AddProjet = ({ show, handleClose, reloadProjets }) => {
   const [nom, setNom] = useState('');
   const [description, setDescription] = useState('');
   const [equipeId, setEquipeId] = useState('');
@@ -14,14 +14,8 @@ const EditProjet = ({ show, handleClose, projetData, reloadProjets }) => {
       axios.get('http://localhost:5132/api/Equipe')
         .then(response => setEquipes(response.data))
         .catch(err => console.error('Erreur chargement équipes', err));
-
-      if (projetData) {
-        setNom(projetData.nom);
-        setDescription(projetData.description);
-        setEquipeId(projetData.equipeId || '');
-      }
     }
-  }, [show, projetData]);
+  }, [show]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,17 +24,12 @@ const EditProjet = ({ show, handleClose, projetData, reloadProjets }) => {
       return;
     }
     try {
-      await axios.put(`http://localhost:5132/api/Projet/${projetData.id}`, {
-        id: projetData.id,
-        nom,
-        description,
-        equipeId,
-      });
+      await axios.post('http://localhost:5132/api/Projet', { nom, description, equipeId });
       handleClose();
       reloadProjets();
     } catch (err) {
-      console.error('Erreur modification projet', err);
-      setError('Erreur modification projet.');
+      console.error('Erreur ajout projet', err);
+      setError('Erreur ajout projet.');
     }
   };
 
@@ -48,7 +37,7 @@ const EditProjet = ({ show, handleClose, projetData, reloadProjets }) => {
     <Modal show={show} onHide={handleClose} backdrop="static" centered>
       <Form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifier Projet</Modal.Title>
+          <Modal.Title>Ajouter Projet</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {error && <Alert variant="danger">{error}</Alert>}
@@ -92,11 +81,11 @@ const EditProjet = ({ show, handleClose, projetData, reloadProjets }) => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>Annuler</Button>
-          <Button type="submit" variant="primary">Modifier</Button>
+          <Button type="submit" variant="primary">Ajouter</Button>
         </Modal.Footer>
       </Form>
     </Modal>
   );
 };
 
-export default EditProjet;
+export default AddProjet;

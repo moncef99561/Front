@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import axios from 'axios';
 
-const EditEquipe = ({ show, handleClose, equipeData, reloadEquipes }) => {
+const AddEquipe = ({ show, handleClose, reloadEquipes }) => {
   const [nom, setNom] = useState('');
   const [description, setDescription] = useState('');
   const [employes, setEmployes] = useState([]);
@@ -25,17 +25,9 @@ const EditEquipe = ({ show, handleClose, equipeData, reloadEquipes }) => {
     }
   }, [show]);
 
-  useEffect(() => {
-    if (equipeData) {
-      setNom(equipeData.nom || '');
-      setDescription(equipeData.description || '');
-      setSelectedEmployeIds(equipeData.employeIds || []);
-    }
-  }, [equipeData]);
-
   const handleCheckboxChange = (employeeId) => {
     if (selectedEmployeIds.includes(employeeId)) {
-      setSelectedEmployeIds(selectedEmployeIds.filter(id => id !== employeeId));
+      setSelectedEmployeIds(selectedEmployeIds.filter((id) => id !== employeeId));
     } else {
       setSelectedEmployeIds([...selectedEmployeIds, employeeId]);
     }
@@ -43,14 +35,14 @@ const EditEquipe = ({ show, handleClose, equipeData, reloadEquipes }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!nom.trim()) {
       setError('Le nom est requis.');
       return;
     }
 
     try {
-      await axios.put(`http://localhost:5132/api/Equipe/${equipeData.id}`, {
-        id: equipeData.id,
+      await axios.post('http://localhost:5132/api/Equipe', {
         nom,
         description,
         employeIds: selectedEmployeIds,
@@ -58,9 +50,13 @@ const EditEquipe = ({ show, handleClose, equipeData, reloadEquipes }) => {
 
       handleClose();
       reloadEquipes();
+      setNom('');
+      setDescription('');
+      setSelectedEmployeIds([]);
+      setError('');
     } catch (err) {
-      console.error('Erreur lors de la mise à jour de l\'équipe', err);
-      setError('Erreur lors de la mise à jour de l\'équipe.');
+      console.error('Erreur lors de l\'ajout de l\'équipe', err);
+      setError('Erreur lors de l\'ajout de l\'équipe.');
     }
   };
 
@@ -68,7 +64,7 @@ const EditEquipe = ({ show, handleClose, equipeData, reloadEquipes }) => {
     <Modal show={show} onHide={handleClose} backdrop="static" centered>
       <Form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifier l'Équipe</Modal.Title>
+          <Modal.Title>Ajouter une Équipe</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {error && <Alert variant="danger">{error}</Alert>}
@@ -96,16 +92,20 @@ const EditEquipe = ({ show, handleClose, equipeData, reloadEquipes }) => {
           <Form.Group className="mb-3">
             <Form.Label>Employés</Form.Label>
             <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid #ced4da', padding: '10px', borderRadius: '5px' }}>
-              {employes.map(emp => (
-                <div key={emp.employeeId} className="mb-2">
-                  <Form.Check
-                    type="checkbox"
-                    label={`${emp.nom} ${emp.prenom}`}
-                    checked={selectedEmployeIds.includes(emp.employeeId)}
-                    onChange={() => handleCheckboxChange(emp.employeeId)}
-                  />
-                </div>
-              ))}
+              {employes.length > 0 ? (
+                employes.map((emp) => (
+                  <div key={emp.employeeId} className="mb-2">
+                    <Form.Check
+                      type="checkbox"
+                      label={`${emp.nom} ${emp.prenom}`}
+                      checked={selectedEmployeIds.includes(emp.employeeId)}
+                      onChange={() => handleCheckboxChange(emp.employeeId)}
+                    />
+                  </div>
+                ))
+              ) : (
+                <div>Aucun employé disponible</div>
+              )}
             </div>
           </Form.Group>
 
@@ -115,7 +115,7 @@ const EditEquipe = ({ show, handleClose, equipeData, reloadEquipes }) => {
             Annuler
           </Button>
           <Button variant="primary" type="submit">
-            Modifier
+            Ajouter
           </Button>
         </Modal.Footer>
       </Form>
@@ -123,4 +123,4 @@ const EditEquipe = ({ show, handleClose, equipeData, reloadEquipes }) => {
   );
 };
 
-export default EditEquipe;
+export default AddEquipe;
