@@ -1,21 +1,23 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
-const DetailProjet = ({ projet, onHide }) => {
-  if (!projet) return null;
+const DetailProjet = ({ show, handleClose, projetData }) => {
+  if (!projetData) return null;
 
   return (
-    <Modal show={!!projet} onHide={onHide}>
+    <Modal show={show} onHide={handleClose} backdrop="static" centered>
       <Modal.Header closeButton>
         <Modal.Title>Détails du Projet</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p><strong>Nom :</strong> {projet.nom}</p>
-        <p><strong>Description :</strong> {projet.description}</p>
-        <p><strong>Équipe assignée :</strong> {projet.equipe?.nom || "Non attribuée"}</p>
+        <p><strong>Nom :</strong> {projetData.nom}</p>
+        <p><strong>Description :</strong> {projetData.description}</p>
+        <p><strong>Équipe :</strong> {projetData.equipeNom}</p>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>Fermer</Button>
+        <Button variant="secondary" onClick={handleClose}>
+          Fermer
+        </Button>
       </Modal.Footer>
     </Modal>
   );

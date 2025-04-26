@@ -28,31 +28,31 @@ const AddFormation = ({ show, handleClose, handleSubmit, formData, setFormData, 
             />
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Type de formation</Form.Label>
-            <Form.Select
-              required
-              value={formData.typeId}
-              onChange={(e) => setFormData({ ...formData, typeId: e.target.value })}
-            >
-              <option value="">-- Sélectionner un type --</option>
-              {types.map(type => (
-                <option key={type.id} value={type.id}>{type.nom}</option>
-              ))}
-            </Form.Select>
-          </Form.Group>
+  <Form.Label>Type de formation</Form.Label>
+  <Form.Select
+    required
+    value={formData.typeFormationId}
+    onChange={(e) => setFormData({ ...formData, typeFormationId: e.target.value })}
+  >
+    <option value="">-- Sélectionner un type --</option>
+    {types.map(type => (
+      <option key={type.id} value={type.id}>{type.nom}</option>
+    ))}
+  </Form.Select>
+</Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Formateur</Form.Label>
-            <Form.Select
-              required
-              value={formData.formateur}
-              onChange={(e) => setFormData({ ...formData, formateur: e.target.value })}
-            >
-              <option value="">-- Sélectionner un formateur --</option>
-              {formateurs.map(f => (
-                <option key={f.id} value={f.nom}>{f.nom}</option>
-              ))}
-            </Form.Select>
-          </Form.Group>
+  <Form.Label>Formateur</Form.Label>
+  <Form.Select
+    required
+    value={formData.formateur}
+    onChange={(e) => setFormData({ ...formData, formateur: e.target.value })}
+  >
+    <option value="">-- Sélectionner un formateur --</option>
+    {formateurs.map(f => (
+    <option key={f.id} value={f.nom}>{f.nom}</option>
+  ))}
+  </Form.Select>
+</Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Date de début</Form.Label>
             <Form.Control

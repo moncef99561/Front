@@ -105,13 +105,13 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container p-4 bg-gray-50 min-vh-100">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-6">Tableau de Bord RH</h2>
+      <div className="max-w-7xl ">
+        <h4 className="text-2xl font-semibold text-gray-900 mb-3">Tableau de Bord RH</h4>
 
         {error && <Alert variant="danger">{error}</Alert>}
 
         {/* Cartes de statistiques */}
-        <Row className="g-4 mb-6">
+        <Row className="g-4 mb-4">
           {[
             { 
               title: 'Employés', 

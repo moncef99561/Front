@@ -1,125 +1,101 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Alert } from 'react-bootstrap';
-import { FaEdit, FaTrash, FaInfoCircle } from 'react-icons/fa';
+import axios from 'axios';
+import AddProjet from './AddProjet';
 import EditProjet from './EditProjet';
 import DetailProjet from './DetailProjet';
+import { FaEdit, FaTrash, FaInfoCircle } from 'react-icons/fa';
 
 const ListProjet = () => {
   const [projets, setProjets] = useState([]);
-  const [equipes, setEquipes] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({ id: null, nom: '', description: '', equipeId: '' });
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [projetData, setProjetData] = useState(null);
   const [error, setError] = useState('');
-  const [selectedProjet, setSelectedProjet] = useState(null);
 
-  // Charger projets + équipes filtrées
+  const loadProjets = async () => {
+    try {
+      const response = await axios.get('http://localhost:5132/api/Projet');
+      setProjets(response.data);
+    } catch (err) {
+      console.error('Erreur de chargement des projets', err);
+      setError('Erreur de chargement des projets.');
+    }
+  };
+
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("projets")) || [];
-    setProjets(saved);
-    chargerEquipesFiltrées();
+    loadProjets();
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("projets", JSON.stringify(projets));
-  }, [projets]);
-
-  const chargerEquipesFiltrées = () => {
-    const allEquipes = JSON.parse(localStorage.getItem("equipes")) || [];
-    const filtered = allEquipes.filter(eq =>
-      ["Backend API", "Développement Frontend", "Support Client"].includes(eq.nom)
-    );
-    setEquipes(filtered);
-  };
-
-  const ajouterEquipesParDefaut = () => {
-    const equipesParDefaut = [
-      { id: 1, nom: "Développement Frontend", description: "UI et composants React" },
-      { id: 2, nom: "Backend API", description: "Services web en .NET ou Node" },
-      { id: 3, nom: "Support Client", description: "Relation utilisateurs" }
-    ];
-    localStorage.setItem("equipes", JSON.stringify(equipesParDefaut));
-    chargerEquipesFiltrées();
-    alert("✅ Équipes par défaut ajoutées !");
-  };
-
-  const showError = (message) => {
-    setError(message);
-    setTimeout(() => setError(''), 3000);
-  };
-
-  const handleDelete = (id) => {
-    setProjets(projets.filter(p => p.id !== id));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!formData.nom.trim()) return showError("Le nom est requis");
-
-    const equipe = equipes.find(eq => eq.id === parseInt(formData.equipeId));
-    const projet = {
-      ...formData,
-      id: formData.id || Date.now(),
-      equipe: equipe || null
-    };
-
-    if (formData.id) {
-      setProjets(projets.map(p => p.id === formData.id ? projet : p));
-    } else {
-      setProjets([...projets, projet]);
+  const handleDelete = async (id) => {
+    if (!window.confirm('Confirmer la suppression de ce projet ?')) return;
+    try {
+      await axios.delete(`http://localhost:5132/api/Projet/${id}`);
+      loadProjets();
+    } catch (err) {
+      console.error('Erreur lors de la suppression', err);
+      setError('Erreur lors de la suppression.');
     }
-
-    setShowModal(false);
-    setFormData({ id: null, nom: '', description: '', equipeId: '' });
-  };
-
-  const handleOpenAdd = () => {
-    setFormData({ id: null, nom: '', description: '', equipeId: '' });
-    setShowModal(true);
   };
 
   return (
     <div className="container mt-4">
-      <h1 className="text-center mt-32 mb-4">Gestion des Projets</h1>
+      <h2 className="text-center mb-4">Gestion des Projets</h2>
 
       {error && <Alert variant="danger">{error}</Alert>}
 
-      <div className="d-flex justify-content-between mb-3">
-        <Button variant="primary" onClick={handleOpenAdd}>Ajouter Projet</Button>
-        {/* <Button variant="secondary" onClick={ajouterEquipesParDefaut}>🛠 Ajouter équipes par défaut</Button> */}
-      </div>
+      <Button variant="primary" onClick={() => setShowAddModal(true)}>
+        Ajouter un Projet
+      </Button>
 
-      <Table striped bordered hover>
+      <Table striped bordered hover className="mt-4">
         <thead>
           <tr>
             <th>Nom</th>
             <th>Description</th>
-            <th>Équipe assignée</th>
+            <th>Équipe</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {projets.map((p) => (
-            <tr key={p.id}>
-              <td>{p.nom}</td>
-              <td>{p.description}</td>
-              <td>{p.equipe?.nom || 'Non attribuée'}</td>
+          {projets.map((projet) => (
+            <tr key={projet.id}>
+              <td>{projet.nom}</td>
+              <td>{projet.description}</td>
+              <td>{projet.equipeNom}</td>
               <td>
-                <Button variant="warning" onClick={() => {
-                  setFormData({
-                    id: p.id,
-                    nom: p.nom,
-                    description: p.description,
-                    equipeId: p.equipe?.id?.toString() || ''
-                  });
-                  setShowModal(true);
-                }}>
+                <Button
+                  variant="warning"
+                  size="sm"
+                  onClick={() => {
+                    setProjetData({
+                      id: projet.id,
+                      nom: projet.nom,
+                      description: projet.description,
+                      equipeId: projet.equipeId
+                    });
+                    setShowEditModal(true);
+                  }}
+                >
                   <FaEdit />
-                </Button>
-                <Button variant="danger" className="ms-2" onClick={() => handleDelete(p.id)}>
-                  <FaTrash />
-                </Button>
-                <Button variant="info" className="ms-2" onClick={() => setSelectedProjet(p)}>
+                </Button>{' '}
+                <Button
+                  variant="info"
+                  size="sm"
+                  onClick={() => {
+                    setProjetData(projet);
+                    setShowDetailModal(true);
+                  }}
+                >
                   <FaInfoCircle />
+                </Button>{' '}
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleDelete(projet.id)}
+                >
+                  <FaTrash />
                 </Button>
               </td>
             </tr>
@@ -127,19 +103,14 @@ const ListProjet = () => {
         </tbody>
       </Table>
 
-      <EditProjet
-        show={showModal}
-        handleClose={() => setShowModal(false)}
-        handleSubmit={handleSubmit}
-        formData={formData}
-        setFormData={setFormData}
-        equipes={equipes}
-      />
-
-      <DetailProjet
-        projet={selectedProjet}
-        onHide={() => setSelectedProjet(null)}
-      />
+      {/* Modales */}
+      <AddProjet show={showAddModal} handleClose={() => setShowAddModal(false)} reloadProjets={loadProjets} />
+      {projetData && (
+        <EditProjet show={showEditModal} handleClose={() => setShowEditModal(false)} projetData={projetData} reloadProjets={loadProjets} />
+      )}
+      {projetData && (
+        <DetailProjet show={showDetailModal} handleClose={() => setShowDetailModal(false)} projetData={projetData} />
+      )}
     </div>
   );
 };

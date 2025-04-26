@@ -96,8 +96,8 @@ const Dashboard = () => {
   };
 
   return (
-    <Container className="my-5">
-      <h3 className="text-center fw-bold mb-4">Dashboard RH - Activité Globale</h3>
+    <Container className="mt-2">
+      <h3 className="text-center fw-bold mb-4">Tableau de Bord - Activité Globale</h3>
       <Row className="g-4 mb-4">
         <Col md={3}><Card className="shadow-sm border-0 p-3 text-center"><h6>Projets</h6><h2 className="text-primary">{stats.projets}</h2></Card></Col>
         <Col md={3}><Card className="shadow-sm border-0 p-3 text-center"><h6>Tâches</h6><h2 className="text-warning">{stats.taches}</h2></Card></Col>

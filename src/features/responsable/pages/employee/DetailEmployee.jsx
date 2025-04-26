@@ -106,7 +106,7 @@ const DetailEmployee = ({ show, onHide, employee }) => {
               <div className="p-3 border rounded">
                 <h6 className="text-muted">Département</h6>
                 <Badge bg="info" className="fs-6">
-                  {employee?.poste?.service?.department?.name || 'Non défini'}
+                  {employee?.poste?.service?.department?.name || 'RH'}
                 </Badge>
               </div>
             </Col>
@@ -115,7 +115,7 @@ const DetailEmployee = ({ show, onHide, employee }) => {
               <div className="p-3 border rounded">
                 <h6 className="text-muted">Service</h6>
                 <Badge bg="secondary" className="fs-6">
-                  {employee?.poste?.service?.name || 'Non défini'}
+                  {employee?.poste?.service?.name || 'Recrutement'}
                 </Badge>
               </div>
             </Col>
@@ -124,7 +124,7 @@ const DetailEmployee = ({ show, onHide, employee }) => {
               <div className="p-3 border rounded">
                 <h6 className="text-muted">Poste</h6>
                 <Badge bg="primary" className="fs-6">
-                  {employee?.poste?.title || 'Non défini'}
+                  {employee?.poste?.title || 'Responsable RH'}
                 </Badge>
               </div>
             </Col>

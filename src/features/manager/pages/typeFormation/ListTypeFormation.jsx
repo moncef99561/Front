@@ -1,50 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Alert } from 'react-bootstrap';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import axios from 'axios';
 import AddTypeFormation from './AddTypeFormation';
 import EditTypeFormation from './EditTypeFormation';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const ListTypeFormation = () => {
   const [types, setTypes] = useState([]);
-  const [formData, setFormData] = useState({ id: null, nom: '', description: '' });
-  const [error, setError] = useState('');
   const [showAdd, setShowAdd] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [selectedType, setSelectedType] = useState(null);
+  const [error, setError] = useState('');
 
-  const showError = (msg) => {
-    setError(msg);
-    setTimeout(() => setError(''), 3000);
+  const loadTypes = async () => {
+    try {
+      const response = await axios.get('http://localhost:5132/api/TypeFormation');
+      setTypes(response.data);
+    } catch (err) {
+      console.error(err);
+      setError("Erreur de chargement des types de formation.");
+    }
   };
 
-  const handleAdd = (e) => {
-    e.preventDefault();
-    const newType = { ...formData, id: Date.now() };
-    setTypes([...types, newType]);
-    setShowAdd(false);
-    setFormData({ id: null, nom: '', description: '' });
-  };
+  useEffect(() => {
+    loadTypes();
+  }, []);
 
-  const handleEdit = (e) => {
-    e.preventDefault();
-    setTypes(types.map(t => t.id === formData.id ? formData : t));
-    setShowEdit(false);
-    setFormData({ id: null, nom: '', description: '' });
-  };
-
-  const handleDelete = (id) => {
-    setTypes(types.filter(t => t.id !== id));
-  };
-
-  const openEditModal = (type) => {
-    setFormData(type);
-    setShowEdit(true);
+  const handleDelete = async (id) => {
+    if (!window.confirm('Confirmer la suppression ?')) return;
+    try {
+      await axios.delete(`http://localhost:5132/api/TypeFormation/${id}`);
+      loadTypes();
+    } catch (err) {
+      setError("Erreur lors de la suppression.");
+    }
   };
 
   return (
     <div className="container mt-4">
-      <h3 className="mb-4 text-center">Gestion des types de formation</h3>
+      <h2 className="text-center mb-4">Gestion des Types de Formation</h2>
       {error && <Alert variant="danger">{error}</Alert>}
-      <Button variant="primary" onClick={() => setShowAdd(true)}>Ajouter un type</Button>
+
+      <Button variant="primary" onClick={() => setShowAdd(true)}>Ajouter Type Formation</Button>
 
       <Table striped bordered hover className="mt-3">
         <thead>
@@ -55,34 +52,34 @@ const ListTypeFormation = () => {
           </tr>
         </thead>
         <tbody>
-          {types.map((t) => (
+          {types.map(t => (
             <tr key={t.id}>
               <td>{t.nom}</td>
               <td>{t.description}</td>
               <td>
-                <Button variant="warning" className="me-2" onClick={() => openEditModal(t)}><FaEdit /></Button>
-                <Button variant="danger" onClick={() => handleDelete(t.id)}><FaTrash /></Button>
+                <Button
+                  variant="warning"
+                  size="sm"
+                  onClick={() => {
+                    setSelectedType(t);
+                    setShowEdit(true);
+                  }}>
+                  <FaEdit />
+                </Button>{' '}
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleDelete(t.id)}>
+                  <FaTrash />
+                </Button>
               </td>
             </tr>
           ))}
         </tbody>
       </Table>
 
-      <AddTypeFormation
-        show={showAdd}
-        handleClose={() => setShowAdd(false)}
-        handleSubmit={handleAdd}
-        formData={formData}
-        setFormData={setFormData}
-      />
-
-      <EditTypeFormation
-        show={showEdit}
-        handleClose={() => setShowEdit(false)}
-        handleSubmit={handleEdit}
-        formData={formData}
-        setFormData={setFormData}
-      />
+      <AddTypeFormation show={showAdd} handleClose={() => setShowAdd(false)} reload={loadTypes} />
+      {selectedType && <EditTypeFormation show={showEdit} handleClose={() => setShowEdit(false)} typeFormation={selectedType} reload={loadTypes} />}
     </div>
   );
 };

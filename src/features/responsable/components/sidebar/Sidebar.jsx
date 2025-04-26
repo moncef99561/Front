@@ -19,7 +19,7 @@ const Sidebar = () => {
     { to: '/responsable/entretiens', icon: <FaCalendarAlt />, text: 'Entretiens' },
     { to: '/responsable/demandes-conges', icon: <FaRegCalendarCheck />, text: 'Congés Employés' },
     { to: '/responsable/absences', icon: <FaUserTimes />, text: 'Absences' },
-    { to: '/responsable/chat', icon: <FaComments />, text: 'Messagerie' },
+    // { to: '/responsable/chat', icon: <FaComments />, text: 'Messagerie' },
 
 
   ];
