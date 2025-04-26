@@ -31,7 +31,7 @@ export default function Offers() {
   const experiences = ["Débutant", "1-3 ans", "3-5 ans", "5-10 ans"];
 
   useEffect(() => {
-    axios.get("http://localhost:5272/api/OffreEmploi")
+    axios.get("http://localhost:5263/api/OffreEmploi")
       .then((response) => {
         setJobOffers(response.data);
         setFilteredOffers(response.data);
