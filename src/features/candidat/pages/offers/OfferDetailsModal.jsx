@@ -11,7 +11,7 @@ export default function OfferDetailsModal({ job, onClose, onApply }) {
             <Modal.Title>{job.titre}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-          <p><strong>Titre :</strong> {job.offreEmploiId}</p>
+          <p><strong>Id :</strong> {job.offreEmploiId}</p>
             <p><strong>Titre :</strong> {job.titre}</p>
             <p><strong>Description :</strong> {job.description}</p>
             <p><strong>Lieu :</strong> {job.lieu}</p>

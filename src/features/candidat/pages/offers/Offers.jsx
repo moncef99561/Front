@@ -1,4 +1,3 @@
-// 📁 src/features/candidat/components/offers/Offers.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +6,8 @@ import OffersFilterPanel from "./OffersFilterPanel";
 import OfferCard from "./OfferCard";
 import OffersPagination from "./OffersPagination";
 import OfferDetailsModal from "./OfferDetailsModal";
+import { ImSad  } from "react-icons/im";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function Offers() {
@@ -25,7 +26,7 @@ export default function Offers() {
     experience: "all",
   });
 
-  const jobTypes = ["Temps plein", "Temps partiel", "Freelance", "Stage"];
+  const jobTypes = ["CDI", "CDD", "Freelance", "Stage"];
   const jobCategories = ["Développement", "Design", "Marketing", "Ventes", "RH"];
   const experiences = ["Débutant", "1-3 ans", "3-5 ans", "5-10 ans"];
 
@@ -44,29 +45,28 @@ export default function Offers() {
 
   useEffect(() => {
     let filtered = jobOffers;
-  
+
     if (selectedFilters.type !== "all") {
       filtered = filtered.filter((job) => job.typeContrat === selectedFilters.type);
     }
-  
+
     if (selectedFilters.category !== "all") {
       filtered = filtered.filter((job) => job.categorieTravail === selectedFilters.category);
     }
-  
+
     if (selectedFilters.experience !== "all") {
       filtered = filtered.filter((job) => job.experience === selectedFilters.experience);
     }
-  
+
     if (searchTerm.trim() !== "") {
       filtered = filtered.filter((job) =>
         job.titre.toLowerCase().includes(searchTerm.trim().toLowerCase())
       );
     }
-  
+
     setFilteredOffers(filtered);
     setCurrentPage(1);
   }, [selectedFilters, jobOffers, searchTerm]);
-  
 
   const indexOfLastOffer = currentPage * offersPerPage;
   const indexOfFirstOffer = indexOfLastOffer - offersPerPage;
@@ -74,9 +74,9 @@ export default function Offers() {
   const totalPages = Math.ceil(filteredOffers.length / offersPerPage);
 
   return (
-    <div className="container-fluid bg-light">
+    <div className="container-fluid bg-white">
       <OffersHeader searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      <div className="container py-5">
+      <div className="container py-3">
         <div className="row">
           <div className="col-lg-3">
             <OffersFilterPanel
@@ -89,19 +89,35 @@ export default function Offers() {
           </div>
           <div className="col-lg-9">
             {loading ? (
-              <p>Chargement des offres d'emploi...</p>
+              <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "300px" }}>
+                <div className="spinner-border text-primary" role="status" style={{ width: "4rem", height: "4rem" }}>
+                  <span className="visually-hidden">Chargement...</span>
+                </div>
+              </div>
             ) : error ? (
               <p className="text-danger">{error}</p>
             ) : (
               <>
-                {currentOffers.map((job) => (
-                  <OfferCard key={job.offerEmloiId} job={job} onSelect={setSelectedJob} />
-                ))}
-                <OffersPagination
-                  totalPages={totalPages}
-                  currentPage={currentPage}
-                  setCurrentPage={setCurrentPage}
-                />
+                {currentOffers.length === 0 ? (
+                  <div className="text-center py-5">
+                    <ImSad  size={50} className="text-muted mb-3" />
+                    <h5 className="text-muted">
+                      <p className="h5">Aucune offre trouvée.</p>
+                      <p className="h5">Essayez d'élargir vos filtres ou revenez plus tard.</p>
+                    </h5>
+                  </div>
+                ) : (
+                  <>
+                    {currentOffers.map((job) => (
+                      <OfferCard key={job.offreEmploiId} job={job} onSelect={setSelectedJob} />
+                    ))}
+                    <OffersPagination
+                      totalPages={totalPages}
+                      currentPage={currentPage}
+                      setCurrentPage={setCurrentPage}
+                    />
+                  </>
+                )}
               </>
             )}
           </div>

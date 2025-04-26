@@ -7,6 +7,12 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./middleware/Intercepteur";
 import "./middleware/IntercepteurError";
 
+console.warn = (...args) => {
+  if (
+    args[0]?.includes("React Router Future Flag Warning")
+  ) return;
+  console.warn(...args);
+};
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

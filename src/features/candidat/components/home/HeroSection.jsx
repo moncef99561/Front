@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
-    <section className="hero-section d-flex align-items-center">
+    <section className="hero-section d-flex align-items-center mt-2">
       <div className="container-fluid px-5">
         <div className="row align-items-center">
           <div className="col-lg-6 col-md-12 text-center text-lg-center">
