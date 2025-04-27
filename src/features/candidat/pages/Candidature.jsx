@@ -17,7 +17,7 @@ export default function Candidature() {
 
   useEffect(() => {
     if (id && !isNaN(Number(id))) {
-      axios.get(`http://localhost:5272/api/OffreEmploi/${id}`)
+      axios.get(`http://localhost:5263/api/OffreEmploi/${id}`)
         .then(res => setOffre(res.data))
         .catch(() => setMessage("Offre introuvable ou erreur serveur."));
     } else {
@@ -32,13 +32,11 @@ export default function Candidature() {
     try {
       if (!cvFile) throw new Error("Le CV est obligatoire.");
 
-      // 1️⃣ Vérifier l'extension du CV
       const cvExt = getExtension(cvFile.name);
       if (!allowedExtensions.includes(cvExt)) {
         throw new Error(`Format de fichier CV non autorisé (${cvExt}). Formats autorisés : ${allowedExtensions.join(", ")}`);
       }
 
-      // 2️⃣ Vérifier la taille du CV
       if (cvFile.size > 5 * 1024 * 1024) {
         throw new Error("Le fichier CV dépasse la taille maximale autorisée de 5MB.");
       }
@@ -63,7 +61,7 @@ export default function Candidature() {
       setMessage("✅ Candidature envoyée avec succès !");
       setCvFile(null);
       setLettreMotivationFile(null);
-      setTimeout(() => navigate("/offers"), 2000);
+      setTimeout(() => navigate("/profil"), 2000);
     } catch (error) {
       console.error("Erreur lors de l'envoi :", error);
       setMessage(error.response?.data || error.message || "Erreur lors de l'envoi de la candidature.");
