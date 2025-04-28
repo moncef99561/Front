@@ -1,41 +1,41 @@
-import React from "react";
-import { Card, Row, Col, Badge, Button, Container } from "react-bootstrap";
-import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaIdCard, FaUniversity } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { Card, Row, Col, Badge, Container } from "react-bootstrap";
+import axios from "axios";
 
 const ProfilEmployee = () => {
-  const employe = {
-    cin: "F112295",
-    nom: "Ach-chatouani",
-    prenom: "Abderrahim",
-    dateNaissance: "10/01/2004",
-    email: "abderrahim@gmail.com",
-    telephone: "0612339977",
-    adresse: "oujda sidi yahya najd 01",
-    dateEmbauche: "26/02/2025",
-    rib: "123456789101112",
-    banque: "CIH",
-    cnss: "7896543",
-    departement: "Comptabilité",
-    service: "Gestion des salaires",
-    poste: "Comptable"
+  const [profil, setProfil] = useState(null);
+
+  useEffect(() => {
+    loadProfil();
+  }, []);
+
+  const loadProfil = async () => {
+    try {
+      const res = await axios.get("http://localhost:5107/api/ProfilEmploye");
+      setProfil(res.data);
+    } catch (err) {
+      console.error("Erreur chargement profil", err);
+    }
   };
+
+  if (!profil) return <p>Chargement du profil...</p>;
 
   return (
     <Container className="mt-4">
       <Card className="shadow-lg border-0">
         <Card.Header className="bg-primary text-white text-center py-3">
-          <h4 className="mb-0">Profil</h4>
+          <h4>Profil</h4>
         </Card.Header>
         <Card.Body>
-          <Row className="mb-4">
+          <Row>
             <Col md={6}>
               <Card className="border-0">
                 <Card.Body>
-                  <h5 className="fw-semibold mb-3">Détails Personnels</h5>
-                  <p><FaIdCard className="me-2 text-primary" /> <strong>CIN:</strong> {employe.cin}</p>
-                  <p><FaUser className="me-2 text-primary" /> <strong>Nom:</strong> {employe.nom} {employe.prenom}</p>
-                  <p><FaCalendarAlt className="me-2 text-primary" /> <strong>Naissance:</strong> {employe.dateNaissance}</p>
-                  <p><FaEnvelope className="me-2 text-primary" /> <strong>Email:</strong> {employe.email}</p>
+                  <h5 className="fw-semibold mb-3">Détails personnels</h5>
+                  <p><strong>CIN :</strong> {profil.cin}</p>
+                  <p><strong>Nom :</strong> {profil.nom} {profil.prenom}</p>
+                  <p><strong>Naissance :</strong> {new Date(profil.dateNaissance).toLocaleDateString()}</p>
+                  <p><strong>Email :</strong> {profil.email}</p>
                 </Card.Body>
               </Card>
             </Col>
@@ -43,51 +43,28 @@ const ProfilEmployee = () => {
               <Card className="border-0">
                 <Card.Body>
                   <h5 className="fw-semibold mb-3">Coordonnées</h5>
-                  <p><FaPhone className="me-2 text-primary" /> <strong>Téléphone:</strong> {employe.telephone}</p>
-                  <p><FaMapMarkerAlt className="me-2 text-primary" /> <strong>Adresse:</strong> {employe.adresse}</p>
-                  <p><FaCalendarAlt className="me-2 text-primary" /> <strong>Date d'embauche:</strong> {employe.dateEmbauche}</p>
-                  <p><FaUniversity className="me-2 text-primary" /> <strong>RIB:</strong> {employe.rib} | {employe.banque}</p>
-                  <p><strong>CNSS:</strong> {employe.cnss}</p>
+                  <p><strong>Téléphone :</strong> {profil.telephone}</p>
+                  <p><strong>Adresse :</strong> {profil.adresse}</p>
+                  <p><strong>Date d'embauche :</strong> {new Date(profil.dateEmbauche).toLocaleDateString()}</p>
+                  <p><strong>RIB :</strong> {profil.rib} ({profil.banque})</p>
+                  <p><strong>CNSS :</strong> {profil.cnss}</p>
                 </Card.Body>
               </Card>
             </Col>
           </Row>
 
-          <h5 className="fw-semibold mb-3 text-center">Informations Professionnelles</h5>
-          <Row className="text-center mb-4">
+          <h5 className="fw-semibold mt-4 text-center">Informations professionnelles</h5>
+          <Row className="text-center mt-3">
             <Col md={4}>
-              <Card className="border-0 shadow-sm">
-                <Card.Body>
-                  <strong>Département</strong>
-                  <div className="mt-2">
-                    <Badge bg="info" pill>{employe.departement || "Non Defini"}</Badge>
-                  </div>
-                </Card.Body>
-              </Card>
+              <Badge bg="info" pill>{profil.departement || "Non défini"}</Badge>
             </Col>
             <Col md={4}>
-              <Card className="border-0 shadow-sm">
-                <Card.Body>
-                  <strong>Service</strong>
-                  <div className="mt-2">
-                    <Badge bg="secondary" pill>{employe.service || "Non Defini"}</Badge>
-                  </div>
-                </Card.Body>
-              </Card>
+              <Badge bg="secondary" pill>{profil.service || "Non défini"}</Badge>
             </Col>
             <Col md={4}>
-              <Card className="border-0 shadow-sm">
-                <Card.Body>
-                  <strong>Poste</strong>
-                  <div className="mt-2">
-                    <Badge bg="primary" pill>{employe.poste || "Non Defini"}</Badge>
-                  </div>
-                </Card.Body>
-              </Card>
+              <Badge bg="primary" pill>{profil.poste || "Non défini"}</Badge>
             </Col>
           </Row>
-
-          
         </Card.Body>
       </Card>
     </Container>
