@@ -1,23 +1,39 @@
-import React, { useState } from "react";
-import { Table, Badge, Form, Alert, Button, Row, Col } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Table, Badge, Form, Alert, Row, Col } from "react-bootstrap";
+import axios from "axios";
 
 const AbsencesEmploye = () => {
-  const [absences, setAbsences] = useState([
-    { id: 1, date: "2024-04-01", statut: "non justifiée", justificatif: null },
-    { id: 2, date: "2024-04-10", statut: "justifiée" },
-    { id: 3, date: "2024-04-15", statut: "en attente", justificatif: "certificat1.pdf" },
-  ]);
+  const [absences, setAbsences] = useState([]);
   const [message, setMessage] = useState("");
+  const employeeId = localStorage.getItem("employeeId");
 
-  const handleUpload = (e, id) => {
+  useEffect(() => {
+    const fetchAbsences = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5107/api/AbsenceEmploye/${employeeId}`);
+        setAbsences(res.data);
+      } catch (error) {
+        console.error("Erreur chargement absences", error);
+      }
+    };
+
+    if (employeeId) {
+      fetchAbsences();
+    }
+  }, [employeeId]);
+
+  const handleUpload = async (e, id) => {
     const file = e.target.files[0];
-    if (file) {
-      const updated = absences.map((a) =>
-        a.id === id ? { ...a, statut: "en attente", justificatif: file.name } : a
-      );
-      setAbsences(updated);
-      setMessage("Justificatif envoyé ou modifié. En attente de validation du manager.");
-      setTimeout(() => setMessage(""), 4000);
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("Justificatif", file);
+
+    try {
+      await axios.post(`http://localhost:5107/api/AbsenceEmploye/justifier/${id}`, formData);
+      setMessage("Justificatif envoyé avec succès.");
+    } catch (error) {
+      console.error("Erreur upload justificatif", error);
     }
   };
 
@@ -53,27 +69,14 @@ const AbsencesEmploye = () => {
                 </Badge>
               </td>
               <td>
-                {abs.statut === "non justifiée" ? (
+                {abs.statut !== "justifiée" ? (
                   <Form.Control
                     type="file"
                     size="sm"
                     onChange={(e) => handleUpload(e, abs.id)}
                   />
-                ) : abs.statut === "en attente" ? (
-                  <Row className="align-items-center">
-                    <Col xs={7} className="text-start">
-                      <span className="text-muted small">{abs.justificatif}</span>
-                    </Col>
-                    <Col xs={5}>
-                      <Form.Control
-                        type="file"
-                        size="sm"
-                        onChange={(e) => handleUpload(e, abs.id)}
-                      />
-                    </Col>
-                  </Row>
                 ) : (
-                  <span className="text-muted">Envoyé</span>
+                  <span className="text-muted">Justifié</span>
                 )}
               </td>
             </tr>

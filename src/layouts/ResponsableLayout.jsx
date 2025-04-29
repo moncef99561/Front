@@ -14,8 +14,10 @@ import ListDemandeConges from "../features/responsable/pages/conge/ListDemandeCo
 import EntretienList from "../features/responsable/pages/entretien/EntretienList";
 import ListAbsence from "../features/responsable/pages/absence/ListAbsence";
 //import ChatPage from "../features/responsable/pages/chat/chatPage";
+import ListTypeDocument from "../features/responsable/pages/typeDocument/ListTypeDocument";
 import { Image } from "react-bootstrap";
 import { FaBell, FaComments } from "react-icons/fa";
+
 
 const employeeMock = {
   photo: "https://randomuser.me/api/portraits/men/21.jpg"
@@ -68,6 +70,8 @@ function ResponsableLayout() {
           <Route path="/detail/:employeeId" element={<DetailEmployee />} />
           <Route path="/demandes-conges" element={<ListDemandeConges />} />
           <Route path="/absences" element={<ListAbsence />} />
+          <Route path="/type-document" element={<ListTypeDocument />} />
+
           {/* <Route path="/chat" element={<ChatPage />} />
           <Route path="/chat" element={<ChatPage currentUser={{ userId: "1", name: "Admin" }} />} /> */}
 

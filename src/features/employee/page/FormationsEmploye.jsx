@@ -1,40 +1,59 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Button, Badge, Alert, Row, Col } from "react-bootstrap";
+import axios from "axios";
 
 const FormationsEmploye = () => {
-  const formationsDisponibles = [
-    { id: 1, titre: "Communication efficace", date: "2024-05-10" },
-    { id: 2, titre: "Leadership et motivation", date: "2024-05-15" },
-    { id: 3, titre: "Gestion du stress", date: "2024-05-20" },
-  ];
-
-  const formationsEnCours = [
-    { id: 4, titre: "Cybersécurité pour tous", date: "2024-04-25" },
-  ];
-
-  const formationsPassees = [
-    { id: 5, titre: "Utilisation avancée d'Excel", date: "2024-03-18" },
-    { id: 6, titre: "Bien-être au travail", date: "2024-03-01" },
-  ];
-
+  const [formationsDisponibles, setFormationsDisponibles] = useState([]);
+  const [formationsEnCours, setFormationsEnCours] = useState([]);
+  const [formationsPassees, setFormationsPassees] = useState([]);
   const [vue, setVue] = useState("disponibles");
   const [feedback, setFeedback] = useState(null);
+  const employeeId = localStorage.getItem("employeeId");
 
-  const handleAssister = (id) => {
-    alert("Inscription enregistrée pour la formation ID: " + id);
-  };
+  useEffect(() => {
+    const fetchFormations = async () => {
+      try {
+        const dispo = await axios.get(`http://localhost:5107/api/FormationEmploye/disponibles/${employeeId}`);
+        const encours = await axios.get(`http://localhost:5107/api/FormationEmploye/encours/${employeeId}`);
+        const passees = await axios.get(`http://localhost:5107/api/FormationEmploye/passees/${employeeId}`);
+        setFormationsDisponibles(dispo.data);
+        setFormationsEnCours(encours.data);
+        setFormationsPassees(passees.data);
+      } catch (error) {
+        console.error("Erreur chargement formations", error);
+      }
+    };
 
-  const handleFeedback = (id) => {
-    const commentaire = prompt("Laissez votre feedback pour la formation ID: " + id);
-    if (commentaire) {
-      setFeedback(`Merci pour votre retour : \"${commentaire}\"`);
+    if (employeeId) {
+      fetchFormations();
     }
-  };
+  }, [employeeId]);
 
   const getFormations = () => {
     if (vue === "cours") return formationsEnCours;
     if (vue === "passees") return formationsPassees;
     return formationsDisponibles;
+  };
+
+  const handleFeedback = async (idFormation) => {
+    const commentaire = prompt("Laissez votre feedback pour cette formation :");
+    if (commentaire) {
+      setFeedback(`Merci pour votre retour : "${commentaire}"`);
+      // Optionnel : envoyer le feedback vers le backend
+    }
+  };
+
+  const handleAssister = async (idFormation) => {
+    try {
+      await axios.post(`http://localhost:5107/api/FormationEmploye/inscription`, {
+        formationId: idFormation,
+        employeId: parseInt(employeeId),
+      });
+      alert("Inscription réussie !");
+      window.location.reload();
+    } catch (error) {
+      console.error("Erreur inscription", error);
+    }
   };
 
   return (
@@ -63,7 +82,7 @@ const FormationsEmploye = () => {
           {getFormations().map((f) => (
             <tr key={f.id}>
               <td>{f.titre}</td>
-              <td>{new Date(f.date).toLocaleDateString()}</td>
+              <td>{new Date(f.dateDebut).toLocaleDateString()}</td>
               <td>
                 {vue === "passees" ? (
                   <Button size="sm" variant="outline-primary" onClick={() => handleFeedback(f.id)}>
