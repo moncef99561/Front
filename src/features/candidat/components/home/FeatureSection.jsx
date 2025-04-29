@@ -4,7 +4,7 @@ import "./styles/FeatureSection.css";
 
 const FeatureSection = () => {
   return (
-    <section className="feature-section py-4">
+    <section className="feature-section">
       <div className="container">
         <div className="row text-center">
           <div className="col-md-4">
