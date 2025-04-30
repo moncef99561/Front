@@ -13,14 +13,34 @@ export default function Login() {
     setError(null);
 
     try {
-      const response = await apiAuth.post("/auth/login", { username, password }); // 🔥 API AuthService
-      const { token, utilisateurId, typeUtilisateur } = response.data;
+      const response = await apiAuth.post("/auth/login", { username, password }); 
+      const { token, utilisateurId, typeUtilisateur, nom, prenom } = response.data;
 
       localStorage.setItem("token", token);
       localStorage.setItem("utilisateurId", utilisateurId);
+      localStorage.setItem("nom", nom);
+      localStorage.setItem("prenom", prenom);
       localStorage.setItem("typeUtilisateur", typeUtilisateur);
 
-      navigate("/");
+      // 🔁 Redirection selon le rôle
+      switch (typeUtilisateur.toLowerCase()) {
+        case "responsable":
+          navigate("/responsable");
+          break;
+        case "candidat":
+          navigate("/");
+          break;
+        case "manager":
+          navigate("/manager");
+          break;
+        case "employe":
+          navigate("/employee");
+          break;
+        default:
+          navigate("/");
+          break;
+      }
+
     } catch (error) {
       if (error.response?.status === 401) {
         setError("Nom d'utilisateur ou mot de passe incorrect.");
