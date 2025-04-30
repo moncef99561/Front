@@ -13,8 +13,13 @@ import ListDemandeConges from "../features/responsable/pages/conge/ListDemandeCo
 import EntretienList from "../features/responsable/pages/entretien/EntretienList";
 import ListAbsence from "../features/responsable/pages/absence/ListAbsence";
 import ChatPage from "../features/responsable/pages/chat/chatPage"; 
+
+//import ChatPage from "../features/responsable/pages/chat/chatPage";
+import ListTypeDocument from "../features/responsable/pages/typeDocument/ListTypeDocument";
+
 import { Image } from "react-bootstrap";
 import { FaBell, FaComments } from "react-icons/fa";
+
 
 const employeeMock = {
   photo: "https://randomuser.me/api/portraits/men/21.jpg"
@@ -78,22 +83,23 @@ function ResponsableLayout() {
         </div>
 
         <div className="p-3">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/employees" element={<EmployeeList />} />
-            <Route path="/jobOffers" element={<JobOfferList />} />
-            <Route path="/contractTypes" element={<ContractTypeList />} />
-            <Route path="/departments" element={<DepartmentList />} />
-            <Route path="/services" element={<ServiceList />} />
-            <Route path="/postes" element={<PosteList />} />
-            <Route path="/entretiens" element={<EntretienList />} />
-            <Route path="/detail/:employeeId" element={<DetailEmployee />} />
-            <Route path="/demandes-conges" element={<ListDemandeConges />} />
-            <Route path="/absences" element={<ListAbsence />} />
-            {currentUser && (
-              <Route path="chat" element={<ChatPage currentUser={currentUser} />} />
-            )}
-          </Routes>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/employees" element={<EmployeeList />} />
+          <Route path="/jobOffers" element={<JobOfferList />} />
+          <Route path="/contractTypes" element={<ContractTypeList />} />
+          <Route path="/departments" element={<DepartmentList />} />
+          <Route path="/services" element={<ServiceList />} />
+          <Route path="/postes" element={<PosteList />} />
+          <Route path="/entretiens" element={<EntretienList />} />
+          <Route path="/detail/:employeeId" element={<DetailEmployee />} />
+          <Route path="/demandes-conges" element={<ListDemandeConges />} />
+          <Route path="/absences" element={<ListAbsence />} />
+          <Route path="/type-document" element={<ListTypeDocument />} />
+
+          {/* <Route path="/chat" element={<ChatPage />} />
+          <Route path="/chat" element={<ChatPage currentUser={{ userId: "1", name: "Admin" }} />} /> */}
+        </Routes>
         </div>
       </div>
     </div>

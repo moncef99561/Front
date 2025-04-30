@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import FileUploadBox from "./FileUploadBox";
+import apiRecrutement from "../services/apiRecrutement";
 import "./Candidature.css";
 
 export default function Candidature() {
@@ -38,13 +39,17 @@ export default function Candidature() {
       }
 
       if (cvFile.size > 5 * 1024 * 1024) {
-        throw new Error("Le fichier CV dépasse la taille maximale autorisée de 5MB.");
+        throw new Error("Le fichier  "+ cvFile.name +" dépasse la taille maximale autorisée de 5MB.");
       }
 
       if (lettreMotivationFile) {
         const lettreExt = getExtension(lettreMotivationFile.name);
         if (!allowedExtensions.includes(lettreExt)) throw new Error(`Format de lettre non autorisé (${lettreExt}). Formats autorisés : ${allowedExtensions.join(", ")}`);
       }
+      if (lettreMotivationFile && lettreMotivationFile.size > 5 * 1024 * 1024) {
+        throw new Error("Le fichier " + lettreMotivationFile.name + " dépasse la taille maximale autorisée de 5MB.");
+      }
+      
 
       const formData = new FormData();
       formData.append("Status", "En attente");
@@ -54,9 +59,8 @@ export default function Candidature() {
       if (lettreMotivationFile) formData.append("LettreMotivation", lettreMotivationFile);
 
       setLoading(true);
-      await axios.post("http://localhost:5272/api/Candidature", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+
+      await apiRecrutement.post("/Candidature", formData);
 
       setMessage("✅ Candidature envoyée avec succès !");
       setCvFile(null);
@@ -96,13 +100,13 @@ export default function Candidature() {
                   <div className="col-md-6">
                     <FileUploadBox
                       title="Lettre de motivation"
-                      onChange={(e) => setLettreMotivationFile(e.target.files[0])}
+                      onChange={
+                        (e) => setLettreMotivationFile(e.target.files[0])}
                       file={lettreMotivationFile}
                       note="*Facultative mais peut renforcer votre candidature."
                     />
                   </div>
                 </div>
-
 
                 <button
                   type="submit"
@@ -113,8 +117,6 @@ export default function Candidature() {
                 >
                   {loading ? "⏳ Envoi en cours..." : "Envoyer"}
                 </button>
-
-
               </form>
             </div>
           </div>

@@ -1,107 +1,94 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, Button, Form, Modal, Badge, Alert } from 'react-bootstrap';
+import axios from "axios";
 
 const typesConge = ["Maladie", "Annuel", "Maternité", "Sans solde"];
 
 const DemandeConge = () => {
-  const [soldeConge, setSoldeConge] = useState(18);
   const [demandes, setDemandes] = useState([]);
-  const [formData, setFormData] = useState({
-    id: null,
-    type: '',
-    dateDebut: '',
-    dateFin: '',
-    statut: 'En attente'
-  });
+  const [formData, setFormData] = useState({ type: '', dateDebut: '', dateFin: '' });
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState('');
+  const employeeId = localStorage.getItem("employeeId");
 
-  const handleSave = (e) => {
+  const fetchDemandes = async () => {
+    try {
+      const res = await axios.get(`http://localhost:5107/api/DemandeCongeEmploye/${employeeId}`);
+      setDemandes(res.data);
+    } catch (error) {
+      console.error("Erreur chargement demandes congé", error);
+    }
+  };
+
+  useEffect(() => {
+    if (employeeId) {
+      fetchDemandes();
+    }
+  }, [employeeId]);
+
+  const handleSave = async (e) => {
     e.preventDefault();
     if (!formData.type || !formData.dateDebut || !formData.dateFin) {
       setError("Veuillez remplir tous les champs.");
       return;
     }
-    if (formData.id) {
-      setDemandes(demandes.map(d => d.id === formData.id ? formData : d));
-    } else {
-      const nouvelleDemande = { ...formData, id: Date.now() };
-      setDemandes([...demandes, nouvelleDemande]);
+
+    const nouvelleDemande = {
+      ...formData,
+      employeeId: parseInt(employeeId),
+    };
+
+    try {
+      await axios.post('http://localhost:5107/api/DemandeCongeEmploye', nouvelleDemande);
+      setFormData({ type: '', dateDebut: '', dateFin: '' });
+      setShowModal(false);
+      fetchDemandes();
+      setError('');
+    } catch (error) {
+      console.error("Erreur enregistrement demande", error);
     }
-    setShowModal(false);
-    setFormData({ id: null, type: '', dateDebut: '', dateFin: '', statut: 'En attente' });
-    setError('');
-  };
-
-  const handleEdit = (demande) => {
-    setFormData(demande);
-    setShowModal(true);
-  };
-
-  const handleDelete = (id) => {
-    setDemandes(demandes.filter(d => d.id !== id));
   };
 
   return (
     <div className="container mt-4">
       <h4 className="mb-3">📆 Mes demandes de congé</h4>
 
-      <div className="mb-3">
-        <strong>Solde de congé disponible :</strong>{' '}
-        <Badge bg="info">{soldeConge} jours</Badge>
-      </div>
-
       <Button variant="primary" className="mb-3" onClick={() => setShowModal(true)}>
         + Nouvelle demande
       </Button>
 
-      {demandes.length === 0 ? (
-        <Alert variant="info">Aucune demande enregistrée.</Alert>
-      ) : (
-        <Table bordered hover>
-          <thead className="table-light">
-            <tr>
-              <th>Type</th>
-              <th>Du</th>
-              <th>Au</th>
-              <th>Statut</th>
-              <th>Actions</th>
+      <Table bordered hover>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Du</th>
+            <th>Au</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          {demandes.map((d) => (
+            <tr key={d.id}>
+              <td>{d.type}</td>
+              <td>{new Date(d.dateDebut).toLocaleDateString()}</td>
+              <td>{new Date(d.dateFin).toLocaleDateString()}</td>
+              <td>
+                <Badge
+                  bg={
+                    d.statut === 'Validé'
+                      ? 'success'
+                      : d.statut === 'Refusé'
+                      ? 'danger'
+                      : 'warning'
+                  }
+                >
+                  {d.statut}
+                </Badge>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {demandes.map((d) => (
-              <tr key={d.id}>
-                <td>{d.type}</td>
-                <td>{new Date(d.dateDebut).toLocaleDateString()}</td>
-                <td>{new Date(d.dateFin).toLocaleDateString()}</td>
-                <td>
-                  <Badge
-                    bg={
-                      d.statut === 'Validé'
-                        ? 'success'
-                        : d.statut === 'Refusé'
-                        ? 'danger'
-                        : 'warning'
-                    }
-                  >
-                    {d.statut}
-                  </Badge>
-                </td>
-                <td>
-                  {d.statut === 'En attente' ? (
-                    <>
-                      <Button size="sm" variant="outline-warning" onClick={() => handleEdit(d)}>Modifier</Button>{' '}
-                      <Button size="sm" variant="outline-danger" onClick={() => handleDelete(d.id)}>Supprimer</Button>
-                    </>
-                  ) : (
-                    <span className="text-muted">Verrouillé</span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      )}
+          ))}
+        </tbody>
+      </Table>
 
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
@@ -123,7 +110,7 @@ const DemandeConge = () => {
               </Form.Select>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Date de début</Form.Label>
+              <Form.Label>Date début</Form.Label>
               <Form.Control
                 type="date"
                 value={formData.dateDebut}
@@ -131,7 +118,7 @@ const DemandeConge = () => {
               />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Date de fin</Form.Label>
+              <Form.Label>Date fin</Form.Label>
               <Form.Control
                 type="date"
                 value={formData.dateFin}

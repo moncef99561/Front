@@ -14,10 +14,13 @@ export default function FileUploadBox({ title, onChange, file, note, required = 
         <input
           type="file"
           className="d-none"
-          onChange={onChange}
+          onChange={(e) => {
+            onChange(e);
+          }}
           required={required}
           accept=".pdf,.doc,.docx"
         />
+
       </label>
 
       {file && <p className="mt-2 text-success small">✅ {file.name}</p>}

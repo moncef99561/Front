@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Table, Badge, Form, Alert, Button, Row, Col, Modal, Spinner } from "react-bootstrap";
+import {
+  Table,
+  Badge,
+  Form,
+  Alert,
+  Button,
+  Modal,
+  Spinner,
+} from "react-bootstrap";
 import { FaCamera } from "react-icons/fa";
 import Webcam from "react-webcam";
 import axios from "axios";
@@ -11,18 +19,19 @@ const AbsencesEmploye = () => {
   const [loading, setLoading] = useState(false);
   const webcamRef = useRef(null);
 
-  //const employeId = localStorage.getItem("utilisateurId");
-  const employeId = 1002; 
+  const employeeId = localStorage.getItem("employeeId");
 
   useEffect(() => {
-    if (employeId) {
+    if (employeeId) {
       fetchAbsences();
     }
-  }, []);
+  }, [employeeId]);
 
   const fetchAbsences = async () => {
     try {
-      const response = await axios.get(`http://localhost:5148/api/Absences/employe/${employeId}`);
+      const response = await axios.get(
+        `http://localhost:5107/api/AbsenceEmploye/${employeeId}`
+      );
       setAbsences(response.data);
     } catch (error) {
       console.error("Erreur lors du chargement des absences :", error);
@@ -30,15 +39,23 @@ const AbsencesEmploye = () => {
     }
   };
 
-  const handleUpload = (e, id) => {
+  const handleUpload = async (e, id) => {
     const file = e.target.files[0];
-    if (file) {
-      const updated = absences.map((a) =>
-        a.id === id ? { ...a, statut: "en attente", justificatif: file.name } : a
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("Justificatif", file);
+
+    try {
+      await axios.post(
+        `http://localhost:5107/api/AbsenceEmploye/justifier/${id}`,
+        formData
       );
-      setAbsences(updated);
-      setMessage("Justificatif envoyé ou modifié. En attente de validation du manager.");
-      setTimeout(() => setMessage(""), 4000);
+      setMessage("Justificatif envoyé avec succès.");
+      fetchAbsences();
+    } catch (error) {
+      console.error("Erreur upload justificatif", error);
+      setMessage("Erreur lors de l'envoi du justificatif.");
     }
   };
 
@@ -48,23 +65,23 @@ const AbsencesEmploye = () => {
       alert("Erreur lors de la capture de l'image");
       return;
     }
-  
+
     try {
       setLoading(true);
       setMessage("Envoi de l'image en cours...");
-  
+
       const response = await axios.post("http://localhost:5148/api/Scanner", {
         imageBase64: imageSrc,
       });
-  
+
       const status = response.data.statut?.toLowerCase() ?? "";
-  
+
       if (status === "absent:-1" || status === "inconnu") {
         setMessage("Visage non reconnu. Une absence a été enregistrée.");
       } else if (status.startsWith("present:")) {
-        setMessage(" Présence détectée avec succès.");
+        setMessage("Présence détectée avec succès.");
       } else if (status.startsWith("retard:")) {
-        setMessage(" Retard détecté.");
+        setMessage("Retard détecté.");
       } else if (status.startsWith("absent:")) {
         setMessage("Absence détectée.");
       } else if (status.startsWith("deja_enregistre:")) {
@@ -72,9 +89,9 @@ const AbsencesEmploye = () => {
       } else {
         setMessage("Statut inattendu : " + status);
       }
-  
+
       setShowModal(false);
-      await fetchAbsences(); // recharger la liste
+      await fetchAbsences(); // Recharger la liste
     } catch (error) {
       console.error("Erreur d'envoi :", error);
       setMessage("Erreur lors de l'envoi. Vérifiez la connexion.");
@@ -83,7 +100,7 @@ const AbsencesEmploye = () => {
       setTimeout(() => setMessage(""), 5000);
     }
   };
-  
+
   return (
     <div className="container mt-4">
       <h4 className="mb-4 d-flex justify-content-between align-items-center">
@@ -114,7 +131,19 @@ const AbsencesEmploye = () => {
             absences.map((abs) => (
               <tr key={abs.id} className="align-middle text-center">
                 <td>{new Date(abs.dateAbsence).toLocaleDateString()}</td>
-                <td>{abs.raison || "-"}</td>
+                <td>
+                  <Badge
+                    bg={
+                      abs.statut === "justifiée"
+                        ? "success"
+                        : abs.statut === "en attente"
+                        ? "warning"
+                        : "danger"
+                    }
+                  >
+                    {abs.statut}
+                  </Badge>
+                </td>
                 <td>
                   {abs.justificatifPath ? (
                     <a
@@ -124,8 +153,14 @@ const AbsencesEmploye = () => {
                     >
                       Voir
                     </a>
+                  ) : abs.statut !== "justifiée" ? (
+                    <Form.Control
+                      type="file"
+                      size="sm"
+                      onChange={(e) => handleUpload(e, abs.id)}
+                    />
                   ) : (
-                    <span className="text-muted">Aucun</span>
+                    <span className="text-muted">Justifié</span>
                   )}
                 </td>
               </tr>

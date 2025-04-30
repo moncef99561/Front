@@ -51,7 +51,7 @@ export default function Navbar() {
               <span className="d-none d-md-inline">{username || "Profil"}</span>
             </button>
             <ul className="dropdown-menu dropdown-menu-end">
-              <li><Link className="dropdown-item" to="/profile">Mon profil</Link></li>
+              <li><Link className="dropdown-item" to="/profil">Mon profil</Link></li>
               <li><hr className="dropdown-divider" /></li>
               <li><button className="dropdown-item text-danger" onClick={handleLogout}>Se déconnecter</button></li>
             </ul>

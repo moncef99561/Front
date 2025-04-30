@@ -1,47 +1,53 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, Button, Form, Modal, Alert } from 'react-bootstrap';
 import { FaEdit, FaTrash, FaDownload } from 'react-icons/fa';
+import axios from 'axios';
+
+const typesDocuments = ['Attestation de travail', 'Attestation de salaire', 'Relevé d’heures'];
 
 const DemandeDocuments = () => {
-  const [demandes, setDemandes] = useState([
-    { id: 1, type: 'Attestation de travail', statut: 'accepté', fichier: 'attestation.pdf', date: '2024-04-01' },
-    { id: 2, type: 'Attestation de salaire', statut: 'refusé', date: '2024-04-03' },
-    { id: 3, type: 'Relevé d’heures', statut: 'en attente', date: '2024-04-10' }
-  ]);
-
+  const [demandes, setDemandes] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({ id: null, type: '' });
+  const [formData, setFormData] = useState({ typeDocument: '' });
   const [error, setError] = useState('');
+  const employeeId = localStorage.getItem("employeeId");
 
-  const typesDocuments = ['Attestation de travail', 'Attestation de salaire', 'Relevé d’heures'];
+  useEffect(() => {
+    const fetchDemandes = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5107/api/DemandeDocumentEmploye/${employeeId}`);
+        setDemandes(res.data);
+      } catch (error) {
+        console.error("Erreur chargement demandes documents", error);
+      }
+    };
 
-  const handleSave = (e) => {
-    e.preventDefault();
-    if (!formData.type) return setError('Veuillez choisir un type de document.');
-
-    if (formData.id) {
-      setDemandes(demandes.map(d => d.id === formData.id ? { ...d, type: formData.type } : d));
-    } else {
-      const nouvelle = {
-        id: Date.now(),
-        type: formData.type,
-        statut: 'en attente',
-        date: new Date().toISOString().slice(0, 10)
-      };
-      setDemandes([...demandes, nouvelle]);
+    if (employeeId) {
+      fetchDemandes();
     }
-    setFormData({ id: null, type: '' });
-    setError('');
-    setShowModal(false);
-  };
+  }, [employeeId]);
 
-  const handleEdit = (demande) => {
-    setFormData(demande);
-    setShowModal(true);
-  };
+  const handleSave = async (e) => {
+    e.preventDefault();
+    if (!formData.typeDocument) {
+      setError("Veuillez choisir un type de document.");
+      return;
+    }
 
-  const handleDelete = (id) => {
-    setDemandes(demandes.filter(d => d.id !== id));
+    const nouvelleDemande = {
+      ...formData,
+      employeId: parseInt(employeeId),
+    };
+
+    try {
+      await axios.post('http://localhost:5107/api/DemandeDocumentEmploye', nouvelleDemande);
+      setShowModal(false);
+      setFormData({ typeDocument: '' });
+      setError('');
+      window.location.reload();
+    } catch (error) {
+      console.error("Erreur ajout demande document", error);
+    }
   };
 
   return (
@@ -59,23 +65,24 @@ const DemandeDocuments = () => {
             <th>Type</th>
             <th>Statut</th>
             <th>Téléchargement</th>
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {demandes.map((demande) => (
-            <tr key={demande.id}>
-              <td>{new Date(demande.date).toLocaleDateString()}</td>
-              <td>{demande.type}</td>
+          {demandes.map((d) => (
+            <tr key={d.id}>
+              <td>{new Date(d.dateDemande).toLocaleDateString()}</td>
+              <td>{d.typeDocument}</td>
               <td>
-                <span className={`badge bg-${demande.statut === 'accepté' ? 'success' : demande.statut === 'refusé' ? 'danger' : 'warning'}`}>{demande.statut}</span>
+                <span className={`badge bg-${d.statut === 'accepté' ? 'success' : d.statut === 'refusé' ? 'danger' : 'warning'}`}>
+                  {d.statut}
+                </span>
               </td>
               <td>
-                {demande.statut === 'accepté' && demande.fichier ? (
+                {d.statut === 'accepté' && d.fichier ? (
                   <Button
                     variant="outline-secondary"
                     size="sm"
-                    href={`http://localhost:5148/fichiers/${demande.fichier}`}
+                    href={`http://localhost:5107/fichiers/${d.fichier}`}
                     target="_blank"
                   >
                     <FaDownload /> Télécharger
@@ -84,14 +91,6 @@ const DemandeDocuments = () => {
                   <span className="text-muted">--</span>
                 )}
               </td>
-              <td>
-                <Button variant="outline-warning" size="sm" onClick={() => handleEdit(demande)}>
-                  <FaEdit />
-                </Button>{' '}
-                <Button variant="outline-danger" size="sm" onClick={() => handleDelete(demande.id)}>
-                  <FaTrash />
-                </Button>
-              </td>
             </tr>
           ))}
         </tbody>
@@ -99,7 +98,7 @@ const DemandeDocuments = () => {
 
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Demande de document</Modal.Title>
+          <Modal.Title>Nouvelle demande</Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleSave}>
           <Modal.Body>
@@ -107,10 +106,10 @@ const DemandeDocuments = () => {
             <Form.Group className="mb-3">
               <Form.Label>Type de document</Form.Label>
               <Form.Select
-                value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                value={formData.typeDocument}
+                onChange={(e) => setFormData({ ...formData, typeDocument: e.target.value })}
               >
-                <option value="">-- Sélectionnez un type --</option>
+                <option value="">-- Choisir un type --</option>
                 {typesDocuments.map((type, idx) => (
                   <option key={idx} value={type}>{type}</option>
                 ))}

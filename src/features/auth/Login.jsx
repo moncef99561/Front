@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
+import apiAuth from "./services/apiAuth"; 
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
@@ -11,67 +10,73 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); // Réinitialiser les erreurs
+    setError(null);
 
     try {
-      const response = await axios.post("http://localhost:5100/api/Auth/login", {
-        username,
-        password,
-      });
-
+      const response = await apiAuth.post("/auth/login", { username, password }); 
       const { token, utilisateurId, typeUtilisateur } = response.data;
 
-      // ✅ Stocker les informations dans le localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("utilisateurId", utilisateurId);
       localStorage.setItem("typeUtilisateur", typeUtilisateur);
 
-      console.log("Connexion réussie !");
+      // 🔁 Redirection selon le rôle
+      switch (typeUtilisateur.toLowerCase()) {
+        case "responsable":
+          navigate("/responsable");
+          break;
+        case "candidat":
+          navigate("/");
+          break;
+        case "manager":
+          navigate("/manager");
+          break;
+        case "employe":
+          navigate("/employee");
+          break;
+        default:
+          navigate("/");
+          break;
+      }
 
-      // ✅ Rediriger l'utilisateur vers la page d'accueil ou tableau de bord
-      navigate("/");
     } catch (error) {
       if (error.response?.status === 401) {
         setError("Nom d'utilisateur ou mot de passe incorrect.");
       } else {
-        setError("Une erreur est survenue. Veuillez réessayer.");
+        setError("Erreur de connexion. Réessayez.");
       }
     }
   };
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
-      <form className="bg-white p-4 rounded shadow-sm" style={{ maxWidth: "350px", width: "90%" }} onSubmit={handleSubmit}>
-        <h2 className="text-center fw-bold mb-4">Se Connecter</h2>
+      <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow" style={{ maxWidth: "400px", width: "90%" }}>
+        <h2 className="text-center mb-4">Connexion</h2>
 
         {error && <div className="alert alert-danger">{error}</div>}
 
-        <div className="mb-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Nom d'utilisateur"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
+        <input
+          type="text"
+          className="form-control mb-3"
+          placeholder="Nom d'utilisateur"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
 
-        <div className="mb-3">
-          <input
-            type="password"
-            className="form-control"
-            placeholder="Mot de passe"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+        <input
+          type="password"
+          className="form-control mb-3"
+          placeholder="Mot de passe"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
         <button type="submit" className="btn btn-primary w-100">Se connecter</button>
 
         <p className="text-center mt-3">
-          Pas de compte ? <Link to="/register" className="text-decoration-none">Inscrivez-vous</Link>
+          Pas encore de compte ? <Link to="/register">S'inscrire</Link>
         </p>
       </form>
     </div>
