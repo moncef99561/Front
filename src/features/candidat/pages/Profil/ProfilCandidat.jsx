@@ -1,67 +1,78 @@
-import React from "react";
-import "./ProfilCandidat.css"; // CSS personnalisé
+import React, { useEffect, useState } from "react";
+import apiRecrutement from "../../services/apiRecrutement";
+import "./ProfilCandidat.css";
+import ProfileInfo from "./ProfileInfo";
+import CandidaturesResume from "./CandidaturesResume";
 
-const ProfilCandidat = () => {
+export default function ProfilCandidat() {
+  const [candidat, setCandidat] = useState(null);
+  const [activeTab, setActiveTab] = useState("candidatures"); // Onglet actif
+
+  useEffect(() => {
+    const fetchCandidat = async () => {
+      const id = localStorage.getItem("utilisateurId");
+      if (!id) return;
+
+      try {
+        const response = await apiRecrutement.get(`/Candidat/${id}`);
+        setCandidat(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération du profil :", error);
+      }
+    };
+
+    fetchCandidat();
+  }, []);
+
+  if (!candidat) return <p className="text-center mt-5">Chargement...</p>;
+
   return (
-    <div className="card shadow rounded-4 overflow-hidden mt-3 mx-auto" style={{ maxWidth: '85%' }}>
-      {/* Header bleu avec avatar */}
-      <div className="header-blue position-relative">
-        <img
-          src="https://randomuser.me/api/portraits/men/32.jpg"
-          alt="avatar"
-          className="rounded-circle border border-white position-absolute top-100 start-0 translate-middle ms-4"
-          style={{ width: "80px", height: "80px" }}
-        />
+    <div>
+      <ProfileInfo />
+
+      <div className="mt-4 mx-auto" style={{ maxWidth: "85%" }}>
+        <ul className="nav nav-tabs mt-4 px-4">
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === "candidatures" ? "active" : "text-muted"}`}
+              onClick={() => setActiveTab("candidatures")}
+            >
+              <i className="bi bi-briefcase-fill me-1"></i> Candidatures
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === "entretiens" ? "active" : "text-muted"}`}
+              onClick={() => setActiveTab("entretiens")}
+            >
+              <i className="bi bi-calendar3 me-1"></i> Entretiens
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === "documents" ? "active" : "text-muted"}`}
+              onClick={() => setActiveTab("documents")}
+            >
+              <i className="bi bi-file-earmark-text me-1"></i> Documents
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === "notes" ? "active" : "text-muted"}`}
+              onClick={() => setActiveTab("notes")}
+            >
+              <i className="bi bi-chat-left-dots me-1"></i> Notes
+            </button>
+          </li>
+        </ul>
       </div>
 
-      <div className="card-body pt-5">
-        <div className="d-flex justify-content-between align-items-center mb-2">
-          <div>
-            <h5 className="fw-bold mb-0">Thomas Martin</h5>
-            <small className="text-muted">Développeur Full Stack</small>
-          </div>
-          <div className="d-flex align-items-center gap-2">
-            <span className="badge bg-success bg-opacity-10 text-success">Actif</span>
-            <button className="btn btn-primary btn-sm">Contacter</button>
-          </div>
-        </div>
-
-        {/* Contact info */}
-        <div className="d-flex flex-wrap text-muted small mb-3 gap-3">
-          <div><i className="bi bi-envelope me-1"></i> thomas.martin@example.com</div>
-          <div><i className="bi bi-telephone me-1"></i> +33 6 12 34 56 78</div>
-          <div><i className="bi bi-geo-alt me-1"></i> Paris, France</div>
-          <div><i className="bi bi-linkedin me-1"></i> <a href="/" className="text-decoration-none">Profil LinkedIn</a></div>
-        </div>
-
-        <hr />
-
-        {/* Statistiques */}
-        <div className="row text-center text-muted fw-semibold">
-          <div className="col-md-3 mb-3">
-            <i className="bi bi-briefcase mb-1 d-block fs-4 text-primary"></i>
-            <div>Expérience</div>
-            <div className="text-dark">5 ans</div>
-          </div>
-          <div className="col-md-3 mb-3">
-            <i className="bi bi-clock mb-1 d-block fs-4 text-primary"></i>
-            <div>Disponibilité</div>
-            <div className="text-dark">Immédiate</div>
-          </div>
-          <div className="col-md-3 mb-3">
-            <i className="bi bi-person-check mb-1 d-block fs-4 text-primary"></i>
-            <div>Candidatures</div>
-            <div className="text-dark">3 actives</div>
-          </div>
-          <div className="col-md-3 mb-3">
-            <i className="bi bi-calendar-check mb-1 d-block fs-4 text-primary"></i>
-            <div>Dernier entretien</div>
-            <div className="text-dark">25/04/2023</div>
-          </div>
-        </div>
+      <div className="card rounded-4 overflow-hidden mt-4 mx-auto" style={{ maxWidth: "85%" }}>
+        {activeTab === "candidatures" && <CandidaturesResume />}
+        {activeTab === "entretiens" && <div className="p-4">📅 Liste des entretiens à venir...</div>}
+        {activeTab === "documents" && <div className="p-4">📁 Liste des documents envoyés...</div>}
+        {activeTab === "notes" && <div className="p-4">📝 Notes personnelles ou retours RH...</div>}
       </div>
     </div>
   );
-};
-
-export default ProfilCandidat;
+}

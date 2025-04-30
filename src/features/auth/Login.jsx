@@ -14,12 +14,10 @@ export default function Login() {
 
     try {
       const response = await apiAuth.post("/auth/login", { username, password }); 
-      const { token, utilisateurId, typeUtilisateur, nom, prenom } = response.data;
+      const { token, utilisateurId, typeUtilisateur } = response.data;
 
       localStorage.setItem("token", token);
       localStorage.setItem("utilisateurId", utilisateurId);
-      localStorage.setItem("nom", nom);
-      localStorage.setItem("prenom", prenom);
       localStorage.setItem("typeUtilisateur", typeUtilisateur);
 
       // 🔁 Redirection selon le rôle

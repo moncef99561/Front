@@ -60,9 +60,11 @@ export default function Register() {
             <input type="text" name="Prenom" className="form-control mb-3" placeholder="Prénom" value={formData.Prenom} onChange={handleChange} required />
             <input type="text" name="Nom" className="form-control mb-3" placeholder="Nom" value={formData.Nom} onChange={handleChange} required />
             <input type="date" name="DateNaissance" className="form-control mb-3" value={formData.DateNaissance} onChange={handleChange} required />
+            <input type="text" name="Adresse" className="form-control" placeholder="Adresse (optionnelle)" value={formData.Adresse} onChange={handleChange} />
           </div>
 
           <div className="col-md-6">
+            <input type="tel" name="Telephone" className="form-control mb-3" placeholder="Telephone" value={formData.Telephone} onChange={handleChange} required />
             <input type="email" name="Email" className="form-control mb-3" placeholder="Email" value={formData.Email} onChange={handleChange} required />
             <input type="text" name="Username" className="form-control mb-3" placeholder="Nom d'utilisateur" value={formData.Username} onChange={handleChange} required />
             <input type="password" name="Password" className="form-control mb-3" placeholder="Mot de passe" value={formData.Password} onChange={handleChange} required />
@@ -70,9 +72,6 @@ export default function Register() {
           </div>
         </div>
 
-        <div className="mb-3">
-          <input type="text" name="Adresse" className="form-control" placeholder="Adresse (optionnelle)" value={formData.Adresse} onChange={handleChange} />
-        </div>
 
         <div className="d-flex mb-3">
           <label className="me-2">Sexe : </label>
