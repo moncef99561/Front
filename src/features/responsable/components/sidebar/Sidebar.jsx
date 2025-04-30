@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { FaUsers, FaComments, FaUserTimes, FaBriefcase, FaFileContract, FaBuilding, FaCogs, FaUserTie, FaHome, FaCalendarAlt, FaSignOutAlt, FaRegCalendarCheck } from 'react-icons/fa';
 import './Sidebar.css';
 
-
 const Sidebar = () => {
   const [selectedItem, setSelectedItem] = useState('/dashboard');
 
@@ -19,28 +18,24 @@ const Sidebar = () => {
     { to: '/responsable/entretiens', icon: <FaCalendarAlt />, text: 'Entretiens' },
     { to: '/responsable/demandes-conges', icon: <FaRegCalendarCheck />, text: 'Congés Employés' },
     { to: '/responsable/absences', icon: <FaUserTimes />, text: 'Absences' },
-    // { to: '/responsable/chat', icon: <FaComments />, text: 'Messagerie' },
-
-
+    /*{ to: '/responsable/chat', icon: <FaComments />, text: 'Messagerie' }, */
   ];
 
   return (
     <div className="d-flex flex-column justify-content-between p-3 bg-white text-dark sidebar-container">
-
-      {/* Logo */}
       <div>
         <div className="pt-3 mb-5 px-3">
           <Link to="/responsable" className="nav-link">
             <h2>
               <span className="text-primary">Work</span>
-              Wise</h2>
+              Wise
+            </h2>
           </Link>
         </div>
 
         <Nav className="flex-column gap-1">
           {menuItems.map((item) => {
             const isActive = selectedItem === item.to;
-
             return (
               <Nav.Item key={item.to}>
                 <Link
@@ -49,7 +44,6 @@ const Sidebar = () => {
                   onClick={() => setSelectedItem(item.to)}
                 >
                   {isActive && <div className="sidebar-divider"></div>}
-
                   <span className={`sidebar-icon ${isActive ? 'sidebar-icon-active' : 'sidebar-icon-inactive'}`}>
                     {item.icon}
                   </span>
@@ -61,7 +55,6 @@ const Sidebar = () => {
         </Nav>
       </div>
 
-      {/* Déconnexion */}
       <div className="mb-4">
         <div className="d-flex align-items-center gap-2 px-3 text-secondary sidebar-logout">
           <FaSignOutAlt style={{ width: '24px' }} />

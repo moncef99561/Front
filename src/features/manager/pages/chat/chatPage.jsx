@@ -1,117 +1,97 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Container, Row, Col, Card, Form, Button, InputGroup, ListGroup } from 'react-bootstrap';
-import { FaPaperPlane, FaUserCircle } from 'react-icons/fa';
+import React, { useState, useEffect } from "react";
+import ChatWindow from "../../../responsable/pages/chat/ChatWindow";
+import { getAllEmployees, getUnreadMessages, markMessagesAsRead } from "../../../responsable/services/chatApi";
+import "../../../responsable/pages/chat/chatPage.css";
 
-const mockEmployees = [
-  { id: 1, name: 'Ahmed Karim' },
-  { id: 2, name: 'Sara El Yazidi' },
-  { id: 3, name: 'Youssef Bennis' },
-  { id: 4, name: 'Hajar Zaki' }
-];
-
-const ChatPage = () => {
+const ChatPage = ({ currentUser }) => {
+  const [employees, setEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [message, setMessage] = useState('');
-  const [chats, setChats] = useState({});
-  const messagesEndRef = useRef(null);
-
-  const handleSend = (e) => {
-    e.preventDefault();
-    if (!message.trim() || !selectedEmployee) return;
-
-    const newMsg = {
-      user: 'Manager',
-      text: message,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-
-    setChats((prevChats) => ({
-      ...prevChats,
-      [selectedEmployee.id]: [...(prevChats[selectedEmployee.id] || []), newMsg]
-    }));
-
-    setMessage('');
-  };
+  const [searchQuery, setSearchQuery] = useState("");
+  const [unreadCounts, setUnreadCounts] = useState({});
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chats, selectedEmployee]);
+    if (!currentUser) return;
+
+    getAllEmployees()
+      .then((res) => {
+        console.log("Employés récupérés :", res.data);
+        setEmployees(res.data);
+      })
+      .catch((err) => console.error("Erreur chargement employés", err));
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (!currentUser) return;
+
+    getUnreadMessages(currentUser.userId)
+      .then((res) => {
+        console.log("Messages non lus :", res.data);
+        setUnreadCounts(res.data);
+      })
+      .catch((err) => console.error("Erreur récupération messages non lus", err));
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (!selectedEmployee || !currentUser) return;
+
+    markMessagesAsRead(selectedEmployee.id, currentUser.userId)
+      .then(() => {
+        setUnreadCounts((prev) => ({
+          ...prev,
+          [selectedEmployee.id]: 0,
+        }));
+      })
+      .catch((err) => console.error("Erreur marquage messages lus", err));
+  }, [selectedEmployee, currentUser]);
+
+
+  console.log("Utilisateur connecté :", currentUser);
+  console.log("Liste employés :", employees);
+
+  if (!currentUser) {
+    return <p>Chargement utilisateur en cours...</p>;
+  }
 
   return (
-    <Container fluid className="px-0" style={{ height: '100vh', maxHeight: '100vh' }}>
-      <Row className="h-100">
-        <Col md={3} className="bg-white border-end px-0">
-          <div className="bg-success text-white p-3 fw-bold">Employés</div>
-          <ListGroup variant="flush" className="border-top">
-            {mockEmployees.map(emp => (
-              <ListGroup.Item
-                key={emp.id}
-                action
-                className="d-flex align-items-center gap-2"
-                active={selectedEmployee?.id === emp.id}
-                onClick={() => setSelectedEmployee(emp)}
+    <div className="chat-container">
+      <div className="sidebar">
+        <h2 className="chat-title">Contacts</h2>
+        <input
+          type="text"
+          placeholder="Rechercher un contact..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-bar"
+        />
+
+        <ul className="user-list">
+          {employees.length === 0 ? (
+            <li className="user-item">Aucun contact disponible</li>
+          ) : (
+            employees.map((employee) => (
+              <li
+                key={employee.id}
+                onClick={() => setSelectedEmployee(employee)}
+                className="user-item"
               >
-                <FaUserCircle size={24} />
-                <span>{emp.name}</span>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        </Col>
+                {employee.name}
+                {unreadCounts[employee.id] > 0 && (
+                  <span className="badge">{unreadCounts[employee.id]}</span>
+                )}
+              </li>
+            ))
+          )}
+        </ul>
+      </div>
 
-        <Col md={9} className="d-flex flex-column px-0">
-          <div className="bg-light border-bottom p-3 d-flex align-items-center">
-            <FaUserCircle size={30} className="me-2 text-muted" />
-            <h6 className="mb-0">{selectedEmployee ? selectedEmployee.name : 'Sélectionnez un employé'}</h6>
-          </div>
-
-          <div
-            className="flex-grow-1 px-3 py-2 position-relative"
-            style={{
-              backgroundImage: "url('https://www.transparenttextures.com/patterns/purty-wood.png')",
-              backgroundColor: '#e0dede',
-              backgroundRepeat: 'repeat',
-              overflowY: 'auto'
-            }}
-          >
-            <ListGroup variant="flush">
-              {(chats[selectedEmployee?.id] || []).map((msg, idx) => (
-                <ListGroup.Item
-                  key={idx}
-                  className={`border-0 bg-transparent d-flex flex-column ${msg.user === 'Manager' ? 'align-items-end text-end' : 'align-items-start text-start'}`}
-                >
-                  <div
-                    className={`p-2 rounded-3 mb-2 ${msg.user === 'Manager' ? 'bg-success text-white' : 'bg-white text-dark'}`}
-                    style={{ maxWidth: '75%', wordBreak: 'break-word' }}
-                  >
-                    {msg.text}
-                    <div className="text-end small mt-1 opacity-75">{msg.time}</div>
-                  </div>
-                </ListGroup.Item>
-              ))}
-              <div ref={messagesEndRef} />
-            </ListGroup>
-          </div>
-
-          <div className="bg-white border-top p-3">
-            <Form onSubmit={handleSend}>
-              <InputGroup>
-                <Form.Control
-                  type="text"
-                  className="rounded-pill"
-                  placeholder={selectedEmployee ? 'Écrivez un message...' : 'Choisissez un employé...'}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  disabled={!selectedEmployee}
-                />
-                <Button type="submit" variant="success" className="ms-2 rounded-pill" disabled={!selectedEmployee || !message.trim()}>
-                  <FaPaperPlane />
-                </Button>
-              </InputGroup>
-            </Form>
-          </div>
-        </Col>
-      </Row>
-    </Container>
+      <div className="chat-window">
+        {selectedEmployee ? (
+          <ChatWindow selectedEmployee={selectedEmployee} />
+        ) : (
+          <p style={{ marginLeft: 20 }}>Sélectionnez un employé pour discuter.</p>
+        )}
+      </div>
+    </div>
   );
 };
 

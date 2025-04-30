@@ -8,6 +8,7 @@ import AbsencesEmploye from "../features/employee/page/AbsencesEmploye";
 import FormationsEmploye from "../features/employee/page/FormationsEmploye";
 import DashboardEmploye from "../features/employee/page/DashboardEmploye";
 import DemandeDocuments from "../features/employee/page/DemandeDocuments";
+import ChatPage from "../features/responsable/pages/chat/chatPage";
 import { Image } from "react-bootstrap";
 import { FaBell, FaComments } from "react-icons/fa";
 
@@ -22,7 +23,6 @@ function EmployeeLayout() {
     <div className="d-flex" style={{ minHeight: "100vh" }}>
       <Sidebar />
       <div className="flex-grow-1 bg-light">
-        {/* Barre en haut avec image profil et autres icônes */}
         <div
           className="d-flex justify-content-between align-items-center px-4"
           style={{
@@ -35,7 +35,12 @@ function EmployeeLayout() {
           <h4 className="fw-semibold mt-2">Bienvenue Mr Abderrahim</h4>
           <div className="d-flex align-items-center gap-3">
             <FaBell size={18} style={{ cursor: "pointer" }} title="Notifications" />
-            <FaComments size={18} style={{ cursor: "pointer" }} title="Messagerie" />
+            <FaComments
+              size={18}
+              style={{ cursor: "pointer" }}
+              title="Messagerie"
+              onClick={() => navigate("/employee/chat")}
+            />
             <Image
               src={employeeMock.photo}
               roundedCircle
@@ -57,6 +62,10 @@ function EmployeeLayout() {
             <Route path="/absences" element={<AbsencesEmploye />} />
             <Route path="/formations" element={<FormationsEmploye />} />
             <Route path="/demande-document" element={<DemandeDocuments />} />
+            <Route
+              path="/chat"
+              element={<ChatPage currentUser={{ userId: "6769ff86c88d8211b94eeb86", name: "Oumayma Mokhtari" }} />}
+            />
           </Routes>
         </div>
       </div>
