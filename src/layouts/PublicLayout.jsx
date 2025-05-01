@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import ProfilCandidat from "../features/candidat/pages/Profil/ProfilCandidat";
+import ProfilCandidat from "../features/candidat/pages/Profil/information/ProfilCandidat";
 import Navbar from "../features/candidat/components/navbar/Navbar";
 import Footer from "../features/candidat/components/footer/Footer";
 import Candidature from "../features/candidat/pages/Candidature";

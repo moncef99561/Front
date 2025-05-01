@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FiMapPin, FiCalendar } from "react-icons/fi";
 import { BsBuilding } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import apiRecrutement from "../../services/apiRecrutement";
+import apiRecrutement from "../../../services/apiRecrutement";
 import "./CandidaturesResume.css";
 
 export default function CandidaturesResume() {

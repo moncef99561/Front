@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import apiRecrutement from "../../services/apiRecrutement";
+import apiRecrutement from "../../../services/apiRecrutement";
 import "./ProfilCandidat.css";
 import ProfileInfo from "./ProfileInfo";
-import CandidaturesResume from "./CandidaturesResume";
+import CandidaturesResume from "../candidature/CandidaturesResume";
 
 export default function ProfilCandidat() {
   const [candidat, setCandidat] = useState(null);

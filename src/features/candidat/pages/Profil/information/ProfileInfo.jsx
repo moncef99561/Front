@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import apiRecrutement from "../../services/apiRecrutement";
+import apiRecrutement from "../../../services/apiRecrutement";
 import { MdOutlineEmail } from "react-icons/md";
 import { FiPhone } from "react-icons/fi";
 import { CiLocationOn } from "react-icons/ci";
