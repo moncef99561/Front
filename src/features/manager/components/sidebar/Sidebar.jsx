@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FaUsers, FaChalkboardTeacher , FaLayerGroup , FaBriefcase, FaFileContract, FaUserTimes, FaRegCalendarCheck, FaHome, FaSignOutAlt, FaComments } from 'react-icons/fa';
+import { FaUsers, FaChalkboardTeacher , FaLayerGroup , FaBriefcase, FaFileContract, FaUserTimes, FaRegCalendarCheck, FaHome, FaSignOutAlt } from 'react-icons/fa';
 import './Sidebar.css';
 
 const Sidebar = () => {
