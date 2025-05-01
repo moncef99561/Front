@@ -31,7 +31,7 @@ export default function Login() {
         case "manager":
           navigate("/manager");
           break;
-        case "employe":
+        case "employee":
           navigate("/employee");
           break;
         default:

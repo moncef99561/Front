@@ -7,12 +7,11 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./middleware/Intercepteur";
 import "./middleware/IntercepteurError";
 
+const originalWarn = console.warn;
 console.warn = (...args) => {
-  if (
-    args[0]?.includes("React Router Future Flag Warning")
-  ) return;
-  console.warn(...args);
+  originalWarn("Debug:", ...args); // ✅ appelle l'original sans boucle
 };
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

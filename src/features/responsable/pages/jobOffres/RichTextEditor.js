@@ -9,6 +9,7 @@ import Color from '@tiptap/extension-color';
 import TextStyle from '@tiptap/extension-text-style';
 import Highlight from '@tiptap/extension-highlight';
 
+
 const MenuBar = ({ editor }) => {
   if (!editor) return null;
 

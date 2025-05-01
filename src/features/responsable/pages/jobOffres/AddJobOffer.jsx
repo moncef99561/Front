@@ -1,18 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import RichTextEditor from './RichTextEditor';
+import axios from 'axios';
 
 const AddJobOffer = ({ show, handleClose, handleSave }) => {
   const [formData, setFormData] = useState({
     titre: '',
     description: '',
     dateCreation: '',
-    status: '',
+    status: 'Actif',
     typeContrat: '',
     categorieTravail: '',
     experience: '',
     lieu: '',
     salaire: ''
   });
+
+  const [contratTypes, setContratTypes] = useState([]);
+
+  useEffect(() => {
+    const fetchContratTypes = async () => {
+      try {
+        const res = await axios.get('http://localhost:5263/api/contracttypes');
+        setContratTypes(res.data);
+      } catch (error) {
+        console.error('Erreur lors du chargement des types de contrat :', error);
+      }
+    };
+    fetchContratTypes();
+  }, []);
+
+  const postes = [
+    'Développement',
+    'Informatique',
+    'Management / Digital',
+    'Industrie / Production',
+    'Communication / Marketing'
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,8 +92,7 @@ const AddJobOffer = ({ show, handleClose, handleSave }) => {
                   type="text"
                   name="status"
                   value={formData.status}
-                  onChange={handleChange}
-                  required
+                  readOnly
                 />
               </Form.Group>
             </Col>
@@ -77,41 +100,57 @@ const AddJobOffer = ({ show, handleClose, handleSave }) => {
             <Col md={4}>
               <Form.Group>
                 <Form.Label>Type de Contrat</Form.Label>
-                <Form.Control
-                  type="text"
+                <Form.Select
                   name="typeContrat"
                   value={formData.typeContrat}
                   onChange={handleChange}
                   required
-                />
+                >
+                  <option value="">-- Sélectionner --</option>
+                  {contratTypes.map((type) => (
+                    <option key={type.contractTypeId} value={type.name}>
+                      {type.name}
+                    </option>
+                  ))}
+                </Form.Select>
               </Form.Group>
             </Col>
 
             <Col md={4}>
               <Form.Group>
-                <Form.Label>Catégorie</Form.Label>
-                <Form.Control
-                  type="text"
+                <Form.Label>Poste</Form.Label>
+                <Form.Select
                   name="categorieTravail"
                   value={formData.categorieTravail}
                   onChange={handleChange}
                   required
-                />
+                >
+                  <option value="">-- Sélectionner --</option>
+                  {postes.map((poste, index) => (
+                    <option key={index} value={poste}>{poste}</option>
+                  ))}
+                </Form.Select>
               </Form.Group>
             </Col>
 
             <Col md={4}>
               <Form.Group>
                 <Form.Label>Expérience</Form.Label>
-                <Form.Control
-                  type="text"
+                <Form.Select
                   name="experience"
                   value={formData.experience}
                   onChange={handleChange}
                   required
-                />
+                >
+                  <option value="">-- Sélectionner --</option>
+                  <option value="Débutant">Débutant</option>
+                  <option value="1-3 ans">1-3 ans</option>
+                  <option value="3-5 ans">3-5 ans</option>
+                  <option value="5-10 ans">5-10 ans</option>
+                </Form.Select>
               </Form.Group>
             </Col>
+
 
             <Col md={4}>
               <Form.Group>
@@ -140,13 +179,9 @@ const AddJobOffer = ({ show, handleClose, handleSave }) => {
             <Col md={12}>
               <Form.Group>
                 <Form.Label>Description</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  name="description"
+                <RichTextEditor
                   value={formData.description}
-                  onChange={handleChange}
-                  required
+                  onChange={(val) => setFormData(prev => ({ ...prev, description: val }))}
                 />
               </Form.Group>
             </Col>
