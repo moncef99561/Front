@@ -10,8 +10,8 @@ import {
   FaEdit, 
   FaTrash, 
   FaUser, 
-  FaFileContract, 
-  FaInfoCircle 
+  FaFileContract,
+  FaEye  
 } from 'react-icons/fa';
 //import { FaSearch } from 'react-icons/fa';
 import api from '../../services/api';
@@ -30,7 +30,7 @@ const EmployeeList = () => {
   const [showAccountModal, setShowAccountModal] = useState(false);
   const [showContractModal, setShowContractModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
+  //const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
   const [selectedEmployeeInfo, setSelectedEmployeeInfo] = useState(null);
   const [formData, setFormData] = useState({
     cin: '', nom: '', prenom: '', dateNaissance: '', email: '', telephone: '', adresse: '',
@@ -38,6 +38,9 @@ const EmployeeList = () => {
   });
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState(''); // État pour la recherche
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
 
   // Filtrer les employés selon le terme de recherche
   const filteredEmployees = employees.filter(employee =>
@@ -267,7 +270,7 @@ const EmployeeList = () => {
                     <FaUser />
                   </Button>
                   <Button 
-                    variant="secondary" 
+                    variant="success" 
                     className="me-2"
                     onClick={() => handleShowContractModal(employee)}
                   >
@@ -288,11 +291,16 @@ const EmployeeList = () => {
                     <FaTrash />
                   </Button>
                   <Button 
-                    variant="success" 
-                    onClick={() => handleShowInfoModal(employee)}
-                  >
-                    <FaInfoCircle />
-                  </Button>
+  variant="secondary" 
+  className="me-2"
+  onClick={() => {
+    setSelectedEmployeeId(employee.employeeId);
+    setModalVisible(true);
+  }}
+>
+  <FaEye />
+</Button>
+
                 </td>
               </tr>
             ))
@@ -312,11 +320,11 @@ const EmployeeList = () => {
         handleClose={() => setShowContractModal(false)}
       />
 
-      <DetailEmployee 
-        show={showInfoModal}
-        onHide={() => setShowInfoModal(false)}
-        employee={selectedEmployeeInfo}
-      />
+<DetailEmployee
+  show={modalVisible}
+  onHide={() => setModalVisible(false)}
+  employeeId={selectedEmployeeId}
+/>
 
       <AddEmployee
         show={showModal}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Alert, Spinner } from 'react-bootstrap';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import api from '../../services/api';
+import api, { fetchCandidats } from '../../services/api';
 import AddEntretien from './AddEntretien';
 import EditEntretien from './EditEntretien';
 
@@ -20,11 +20,11 @@ const EntretienList = () => {
             try {
                 const [interviewsRes, candidatsRes, employeesRes] = await Promise.all([
                     api.get('/interviews'),
-                    api.get('/candidats'),
+                    fetchCandidats(), // ✅ appel vers le microservice des candidats (port 5272)
                     api.get('/employees'),
                 ]);
                 setInterviews(interviewsRes.data);
-                setCandidats(candidatsRes.data);
+                setCandidats(candidatsRes); // déjà .data renvoyé par fetchCandidats()
                 setEmployees(employeesRes.data);
             } catch (error) {
                 setError('Erreur de chargement : ' + (error.response?.status || 'inconnue'));
@@ -47,12 +47,18 @@ const EntretienList = () => {
     };
 
     if (loading) {
-        return <div className="text-center mt-4"><Spinner animation="border" /><p>Chargement...</p></div>;
+        return (
+            <div className="text-center mt-4">
+                <Spinner animation="border" />
+                <p>Chargement...</p>
+            </div>
+        );
     }
 
     return (
         <div className="container mt-4">
-      <h1 className="text-center mt-32 mb-5">Planification des Entretiens</h1>
+            <h1 className="text-center mt-4 mb-5">Planification des Entretiens</h1>
+
             {error && <Alert variant="danger" onClose={() => setError('')} dismissible>{error}</Alert>}
 
             <Button variant="primary" onClick={() => setShowAddModal(true)} className="mb-3">
@@ -71,7 +77,9 @@ const EntretienList = () => {
                 </thead>
                 <tbody>
                     {interviews.length === 0 ? (
-                        <tr><td colSpan="5" className="text-center">Aucun entretien trouvé</td></tr>
+                        <tr>
+                            <td colSpan="5" className="text-center">Aucun entretien trouvé</td>
+                        </tr>
                     ) : (
                         interviews.map(interview => {
                             const candidat = candidats.find(c => c.candidatId === interview.candidatId);
@@ -86,16 +94,25 @@ const EntretienList = () => {
                                         <span className={`badge ${
                                             interview.statut === 'Planifié' ? 'bg-warning' :
                                             interview.statut === 'Terminé' ? 'bg-success' : 'bg-danger'
-                                        }`}>{interview.statut}</span>
+                                        }`}>
+                                            {interview.statut}
+                                        </span>
                                     </td>
                                     <td>
-                                        <Button variant="warning" className="me-2" onClick={() => {
-                                            setSelectedInterview(interview);
-                                            setShowEditModal(true);
-                                        }}>
+                                        <Button
+                                            variant="warning"
+                                            className="me-2"
+                                            onClick={() => {
+                                                setSelectedInterview(interview);
+                                                setShowEditModal(true);
+                                            }}
+                                        >
                                             <FaEdit />
                                         </Button>
-                                        <Button variant="danger" onClick={() => handleDelete(interview.interviewId)}>
+                                        <Button
+                                            variant="danger"
+                                            onClick={() => handleDelete(interview.interviewId)}
+                                        >
                                             <FaTrash />
                                         </Button>
                                     </td>
@@ -127,7 +144,9 @@ const EntretienList = () => {
                     candidats={candidats}
                     employees={employees}
                     onUpdate={(updated) => {
-                        setInterviews(prev => prev.map(i => i.interviewId === updated.interviewId ? updated : i));
+                        setInterviews(prev => prev.map(i =>
+                            i.interviewId === updated.interviewId ? updated : i
+                        ));
                     }}
                 />
             )}
